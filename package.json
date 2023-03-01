@@ -1,0 +1,12 @@
+{
+  "name": "coffe-shop",
+  "version": "1.0.0",
+  "description": "application coffe shop",
+  "main": "index.js",
+  "scripts": {},
+  "author": "redha definto",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
