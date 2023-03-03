@@ -1,23 +1,23 @@
 const { Router } = require('express');
 const productsRouter = Router()
+const productController = require('../controllers/product.controller')
 
-const db = require('../configs/postgre')
+productsRouter.get("/", productController)
 
-productsRouter.get("/", async (req, res) => {
-  try {
-    const result =
-      await db.query(`select p.id, p."product_name", p.price, p.image pc."category_name" from products p 
-join prod_categories pc on p.category_id = pc.id;
-`);
-      // let order = 'id ASC'
-    res.status(200).json({
-      data: result.rows
-    })
-  } catch (err) {
-    console.log(err.message)
-    res.status(500).json({
-      msg: "Internal Server Error"
-    })
-  }
-})
+// productsRouter.post('/', async (req, res) => {
+//   const {product_name, price, image, category_id} = req.body
+//   try {
+//     const result = await db.query(`insert into product(product_name, price, image, category_id) values('${product_name}', ${price}, '${image}', '${category_id}');`);
+//     res.status(201).json({
+//       data: result.rows,
+//       msg: 'Insert succes'
+//     })
+//   } catch (error) {
+//     console.log(error.message)
+//     res.status(500).json({
+//       msg: "Insert fail"
+//     })
+//   }
+// })
+
 module.exports = productsRouter;

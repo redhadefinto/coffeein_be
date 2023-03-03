@@ -19,6 +19,6 @@ const masterRouter = Router();
 masterRouter.use("/", welcomeRouter)
 masterRouter.use("/users", usersRouter)
 masterRouter.use("/products", productsRouter)
-masterRouter.use('/images', imagesRouter)
+masterRouter.use('/product/image', imagesRouter)
 
 module.exports = masterRouter;
