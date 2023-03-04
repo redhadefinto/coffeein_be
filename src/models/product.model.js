@@ -36,7 +36,7 @@ const getProductDetail = (params) => {
   })
 }
 
-const insertProducts = (data) => {
+const insertProduct = (data) => {
   return new Promise((resolve, reject) => { 
     const sqlQuery = `insert into products (product_name, price, image, category_id) values ($1, $2, $3, $4) RETURNING *`;
     // parameterized query
@@ -81,7 +81,7 @@ const deleteProduct = (params) => {
 
 module.exports = {
   getProducts,
-  insertProducts,
+  insertProduct,
   getProductDetail,
   updateProduct,
   deleteProduct

@@ -38,10 +38,10 @@ const getProductDetail = async (req, res) => {
 };
 
 
-const insertProducts = async (req, res) => {
+const insertProduct = async (req, res) => {
   try {
     const { body } = req
-    const result = await productsModel.insertProducts(body);
+    const result = await productsModel.insertProduct(body);
     res.status(201).json({
       data: result.rows,
       msg: "Create Success"
@@ -88,7 +88,7 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   getProducts,
-  insertProducts,
+  insertProduct,
   getProductDetail,
   updateProduct,
   deleteProduct
