@@ -3,15 +3,28 @@ const db = require("../configs/postgre");
 const getProducts = (query) => {
   return new Promise((resolve, reject) => {
     let sqlQuery = `select p.id, p."product_name", p.price, p.image, pc."category_name" from products p 
-    join prod_categories pc on p.category_id = pc.id ORDER BY `;
-    let order = "p.id ASC";
-    if(query.order === "cheapest") {
-      order = "p.price ASC"
-    } 
-    if(query.order === "priciest") {
-      order = "p.price DESC"
+    join prod_categories pc on p.category_id = pc.id `;
+
+    // Filter by name
+    if (query.name) {
+      sqlQuery += ` WHERE lower(p."product_name") LIKE lower('%${query.name}%')`;
     }
-    sqlQuery += order
+
+    // Order by price
+    let order = "p.id ASC";
+    if (query.order === "cheapest") {
+      order = "p.price ASC";
+    }
+    if (query.order === "priciest") {
+      order = "p.price DESC";
+    }
+    sqlQuery += ` ORDER BY ${order}`;
+
+    // Limit number of results
+    if (query.limit) {
+      sqlQuery += ` LIMIT ${query.limit}`;
+    }
+
     db.query(sqlQuery, (err, result) => {
       if (err) {
         reject(err);
@@ -21,6 +34,7 @@ const getProducts = (query) => {
     });
   })
 }
+
 const getProductDetail = (params) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `select p.id, p."product_name", p.price, p.image, pc."category_name" from products p 

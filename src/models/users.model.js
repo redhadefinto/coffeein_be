@@ -1,10 +1,16 @@
 const db = require("../configs/postgre");
 
-const getUsers = () => {
+const getUsers = (query) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `select u.id, u.email, u.display_name, u.birth_day, ru.role from users u join role_user ru on u.role_id = ru.id order by $1;`;
-    const values = ['u.id']
-    db.query(sqlQuery, values, (err, result) => {
+    let sqlQuery = `select u.id, u.email, u.display_name, u.birth_day, ru.role from users u join role_user ru on u.role_id = ru.id`
+
+    let limit = "u.id ASC";
+    if (query.order === "cheapest") {
+      limit = ` limit ${query.limit}`;
+    }
+    sqlQuery += ` ORDER BY ${limit}`;
+
+    db.query(sqlQuery, (err, result) => {
       if (err) {
         reject(err);
         return;

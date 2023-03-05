@@ -3,6 +3,13 @@ const promoModel = require('../models/promo.model')
 const getPromo = async (req, res) => {
   try {
     const result = await promoModel.getPromo();
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        data: result.rows,
+        msg: "Product Tidak Ditemukan",
+      });
+      return;
+    }
     res.status(200).json({
       data: result.rows,
     });
@@ -18,6 +25,13 @@ const getPromoDetail = async (req, res) => {
   try {
     const { params } = req;
     const result = await promoModel.getPromoDetail(params);
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        data: result.rows,
+        msg: "Product Tidak Ditemukan",
+      });
+      return;
+    }
     res.status(200).json({
       data: result.rows,
     });

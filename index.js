@@ -1,9 +1,13 @@
+// const dotenv = require('dotenv')
+// dotenv.config()
+require("dotenv").config()
 // express
 const express = require('express')
 const app = express();
 
 // setting port
-const port = 8080;
+// const port = 8080;
+const { serverPort } = require('./src/configs/environment')
 
 // parser untuk body
 // extended false di gunakan untuk object 1 level
@@ -16,6 +20,6 @@ const masterRouter = require('./src/routes')
 app.use(masterRouter)
 
 
-app.listen(port, () => {
-  console.log(`Server is running at port ${port}`)
+app.listen(serverPort, () => {
+  console.log(`Server is running at port ${serverPort}`)
 })

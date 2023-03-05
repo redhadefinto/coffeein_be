@@ -2,7 +2,15 @@ const usersModel = require('../models/users.model')
 
 const getUsers = async (req, res) => {
   try {
-    const result = await usersModel.getUsers()
+    const { query } = req
+    const result = await usersModel.getUsers(query)
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        data: result.rows,
+        msg: "Product Tidak Ditemukan",
+      });
+      return;
+    }
     res.status(200).json({
         data: result.rows,
       })
@@ -18,6 +26,13 @@ const getUserDetail = async (req, res) => {
   try {
     const { params } = req;
     const result = await usersModel.getUserDetail(params);
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        data: result.rows,
+        msg: "Product Tidak Ditemukan",
+      });
+      return;
+    }
     res.status(200).json({
       data: result.rows,
     });

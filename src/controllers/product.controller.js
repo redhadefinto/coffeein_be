@@ -5,8 +5,16 @@ const getProducts = async (req, res) => {
   try {
     const { query } = req;
     const result = await productsModel.getProducts(query);
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        data: result.rows,
+        msg: "Product Tidak Ditemukan",
+      });
+      return;
+    }
     res.status(200).json({
       data: result.rows,
+      msg: "Get Success"
     });
   } catch (err) {
     console.log(err.message);
@@ -26,6 +34,13 @@ const getProductDetail = async (req, res) => {
   try {
     const { params } = req;
     const result = await productsModel.getProductDetail(params);
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        data: result.rows,
+        msg: "Product Tidak Ditemukan",
+      });
+      return;
+    }
     res.status(200).json({
       data: result.rows,
     });
