@@ -10,7 +10,7 @@ const postgre = new Pool({
   database: env.db,
   port: env.dbPort,
   user: env.user,
-  password: "padang",
+  password: env.pwd,
 });
 
 module.exports = postgre;
