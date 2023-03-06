@@ -2,7 +2,7 @@ const db = require("../configs/postgre");
 
 const getUsers = (query) => {
   return new Promise((resolve, reject) => {
-    let sqlQuery = `select u.id, u.email, u.display_name, u.birth_day, ru.role from users u join role_user ru on u.role_id = ru.id`
+    let sqlQuery = `select u.id, u.email, u.display_name, u.birth_day, ru.role from users u join user_role ru on u.role_id = ru.id`
 
     let limit = "u.id ASC";
     if (query.order === "cheapest") {
@@ -24,7 +24,7 @@ const getUserDetail = (params) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `SELECT u.id, u.email, u.password, u.phone_number, u.address, u.display_name, u.first_name, u.last_name, u.birth_day, ru.role, ug.gender 
     FROM users u 
-    JOIN role_user ru ON u.role_id = ru.id 
+    JOIN user_role ru ON u.role_id = ru.id 
     JOIN user_gender ug ON u.gender_id = ug.id 
     WHERE u.id = $1;`;
     const values = [params.userId];
