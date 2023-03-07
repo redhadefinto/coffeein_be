@@ -21,7 +21,7 @@ const getHistoryDetail = async (req, res) => {
     if (result.rows.length === 0) {
       res.status(404).json({
         data: result.rows,
-        msg: "Product Tidak Ditemukan",
+        msg: "History Tidak Ditemukan",
       });
       return;
     }
@@ -40,6 +40,13 @@ const insertHistory = async (req, res) => {
   try {
     const { body } = req;
     const result = await historyModel.insertHistory(body);
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        data: result.rows,
+        msg: "History Tidak Ditemukan",
+      });
+      return;
+    }
     res.status(201).json({
       data: result.rows,
       msg: "Create Success",
