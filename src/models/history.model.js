@@ -5,7 +5,7 @@ const getHistory = () => {
     const sqlQuery = `SELECT h.id, p.product_name, u.display_name, p.price, h.expired
     FROM history h 
     JOIN products p ON h.product_id = p.id 
-    JOIN products p ON h.total_price = p.id
+    ON h.total_price = p.id
     JOIN users u ON h.user_id = u.id 
     order by $1;`;
     const values = ["u.id"];
