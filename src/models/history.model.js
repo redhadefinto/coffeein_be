@@ -25,7 +25,7 @@ const getHistoryDetail = (params) => {
     JOIN products p ON h.product_id = p.id
     JOIN users u ON h.user_id = u.id 
     where h.id = $1;`;
-    const values = [params.userId];
+    const values = [params.historyId];
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
         reject(err);
