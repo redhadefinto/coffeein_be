@@ -18,6 +18,13 @@ const getHistoryDetail = async (req, res) => {
   try {
     const { params } = req;
     const result = await historyModel.getHistoryDetail(params);
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        data: result.rows,
+        msg: "Product Tidak Ditemukan",
+      });
+      return;
+    }
     res.status(200).json({
       data: result.rows,
     });
