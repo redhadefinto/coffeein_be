@@ -41,8 +41,12 @@ const getProducts = (query) => {
 
 const getProductDetail = (params) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `select p.id, p."product_name", p.image, p.price, pc."category_name" from products p 
-    join prod_categories pc on p.category_id = pc.id WHERE p.id = $1`;
+    const sqlQuery = `select p.id, p."product_name", p.image, p.price, pc."category_name", ps.size_name, pm.delivery_methods
+    from products p 
+    join prod_categories pc on p.category_id = pc.id 
+    join prod_size ps on p.size_id = ps.id
+    join prod_delivery_methods pm on p.delivery_method = pm.id
+    WHERE p.id = $1`;
     const values = [params.productId];
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
