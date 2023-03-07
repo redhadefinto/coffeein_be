@@ -4,8 +4,7 @@ const getHistory = () => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `SELECT h.id, p.product_name, u.display_name, p.price, h.expired
     FROM history h 
-    JOIN products p ON h.product_id = p.id 
-    ON h.total_price = p.id
+    JOIN products p ON h.product_id = p.id
     JOIN users u ON h.user_id = u.id 
     order by $1;`;
     const values = ["u.id"];
@@ -24,7 +23,6 @@ const getHistoryDetail = (params) => {
     const sqlQuery = `SELECT h.id, p.product_name, u.display_name, p.price, h.expired
     FROM history h 
     JOIN products p ON h.product_id = p.id
-    JOIN products p ON h.total_price = p.id
     JOIN users u ON h.user_id = u.id 
     WHERE h.id = $1;`;
     const values = [params.userId];
