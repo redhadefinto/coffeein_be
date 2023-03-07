@@ -60,7 +60,7 @@ const getProductDetail = (params) => {
 
 const insertProduct = (data) => {
   return new Promise((resolve, reject) => { 
-    const sqlQuery = `insert into products (product_name, price, category_id, size_id, delivery_method, image) values ($1, $2, $3, $4, $5, $6,) RETURNING *`;
+    const sqlQuery = `insert into products (product_name, price, category_id, size_id, delivery_method, image) values ($1, $2, $3, $4, $5, $6) RETURNING *`;
     // parameterized query
     const values = [data.product_name, data.price, data.category_id, data.size_id, data.delivery_method, data.image];
     db.query(sqlQuery, values, (err, result) => {
