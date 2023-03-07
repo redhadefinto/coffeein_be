@@ -6,7 +6,7 @@ const historyRouter = Router();
 historyRouter.get("/", promoController.getHistory);
 historyRouter.get("/:historyId", promoController.getHistoryDetail);
 historyRouter.post("/", promoController.insertHistory);
-historyRouter.put("/:historyId", promoController.updateHistory);
+historyRouter.patch("/:historyId", promoController.updateHistory);
 historyRouter.delete("/:historyId", promoController.deleteHistory);
 
 
