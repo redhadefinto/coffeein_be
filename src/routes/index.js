@@ -15,6 +15,7 @@ const productsRouter = require('./products.route');
 const imagesRouter = require('./images.routes');
 const promoRouter = require('./promo.route');
 const historyRouter = require('./history.route');
+const express = require('express');
 
 
 const masterRouter = Router();
@@ -24,5 +25,6 @@ masterRouter.use("/products", productsRouter);
 masterRouter.use('/product/image', imagesRouter);
 masterRouter.use('/promo', promoRouter);
 masterRouter.use('/history', historyRouter);
+masterRouter.use('./product/image', express.static('images'));
 
 module.exports = masterRouter;
