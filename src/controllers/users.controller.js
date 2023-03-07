@@ -1,9 +1,9 @@
-const usersModel = require('../models/users.model')
+const usersModel = require('../models/users.model');
 
 const getUsers = async (req, res) => {
   try {
-    const { query } = req
-    const result = await usersModel.getUsers(query)
+    const { query } = req;
+    const result = await usersModel.getUsers(query);
     if (result.rows.length === 0) {
       res.status(404).json({
         data: result.rows,
@@ -13,7 +13,7 @@ const getUsers = async (req, res) => {
     }
     res.status(200).json({
         data: result.rows,
-      })
+      });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({

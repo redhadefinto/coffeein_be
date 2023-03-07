@@ -55,7 +55,7 @@ const getProductDetail = async (req, res) => {
 
 const insertProduct = async (req, res) => {
   try {
-    const { body } = req
+    const { body } = req;
     const result = await productsModel.insertProduct(body);
     res.status(201).json({
       data: result.rows,
@@ -67,7 +67,7 @@ const insertProduct = async (req, res) => {
       msg: "Internal Server Error",
     });
   }
-}
+};
 
 const updateProduct = async (req, res) => {
   try {

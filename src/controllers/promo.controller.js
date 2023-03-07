@@ -1,4 +1,4 @@
-const promoModel = require('../models/promo.model')
+const promoModel = require('../models/promo.model');
 
 const getPromo = async (req, res) => {
   try {
@@ -97,4 +97,4 @@ module.exports = {
   insertPromo,
   updatePromo,
   deletePromo
-}
+};

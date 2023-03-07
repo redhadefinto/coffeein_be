@@ -9,4 +9,4 @@ const welcomePage = (req, res) => {
 
 module.exports = {
   welcomePage,
-}
+};

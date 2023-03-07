@@ -86,4 +86,4 @@ module.exports = {
   insertPromo,
   updatePromo,
   deletePromo
-}
+};
