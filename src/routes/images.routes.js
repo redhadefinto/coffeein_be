@@ -1,9 +1,7 @@
 const express = require("express");
-const path = require("path");
-const app = express();
 
 const imagesRoute = express.Router();
-const expressStatic = express.static("./images");
+const expressStatic = express.static("images");
 
 imagesRoute.get("/", (req, res, next) => {
   try {
