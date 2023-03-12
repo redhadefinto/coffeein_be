@@ -27,7 +27,13 @@ const checkToken = (req, res, next) => {
   });
 };
 
+const checkRole = (req, res, next) => {
+  
+  next();
+};
+
 
 module.exports = {
-  checkToken
+  checkToken,
+  checkRole
 };

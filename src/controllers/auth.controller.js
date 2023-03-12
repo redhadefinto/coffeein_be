@@ -54,6 +54,14 @@ const privateAcces = (req, res) => {
   });
 };
 
+const roleAcces = (req, res) => {
+  const { role_id } = req.authInfo;
+  res.status(200).json({
+    payload: role_id,
+    msg: "OK"
+  });
+};
+
 const editPassword = async (req, res) => {
   // ambil user id => via user id di payload jwt token
   const { authInfo, body } = req;
@@ -90,5 +98,6 @@ const editPassword = async (req, res) => {
 module.exports = {
   login,
   privateAcces,
-  editPassword
+  editPassword,
+  roleAcces
 };
