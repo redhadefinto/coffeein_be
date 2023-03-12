@@ -1,4 +1,5 @@
 const usersModel = require('../models/users.model');
+const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res) => {
   try {
@@ -47,7 +48,9 @@ const getUserDetail = async (req, res) => {
 const insertUser = async (req, res) => {
   try {
     const { body } = req;
-    const result = await usersModel.insertUser(body);
+    const pass =  body.password;
+    const hashedPassword = await bcrypt.hash(pass, 10);
+    const result = await usersModel.insertUser(body, hashedPassword);
     res.status(201).json({
       data: result.rows,
       msg: "Create Success",

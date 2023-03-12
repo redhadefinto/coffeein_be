@@ -28,7 +28,12 @@ const checkToken = (req, res, next) => {
 };
 
 const checkRole = (req, res, next) => {
-  
+  const role = req.authInfo.role_id; // ambil peran pengguna dari payload token
+  if(role !== 1) {
+    return res.status(403).json({
+      msg: "Tidak diizinkan, Hanya admin yang boleh mengakses."
+    });
+  }
   next();
 };
 

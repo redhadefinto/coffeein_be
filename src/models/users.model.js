@@ -2,7 +2,7 @@ const db = require("../configs/postgre");
 
 const getUsers = (query) => {
   return new Promise((resolve, reject) => {
-    let sqlQuery = `select u.id, u.email, u.display_name, u.birth_day, ru.role from users u join user_role ru on u.role_id = ru.id`;
+    let sqlQuery = `select u.id, r.role_name, u.phone_number from users u join roles r on u.role_id = r.id`;
 
     let limit = "u.id ASC";
     if (query.order === "cheapest") {
@@ -22,11 +22,7 @@ const getUsers = (query) => {
 
 const getUserDetail = (params) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `SELECT u.id, u.email, u.password, u.phone_number, u.address, u.display_name, u.first_name, u.last_name, u.birth_day, ru.role, ug.gender 
-    FROM users u 
-    JOIN user_role ru ON u.role_id = ru.id 
-    JOIN user_gender ug ON u.gender_id = ug.id 
-    WHERE u.id = $1;`;
+    const sqlQuery = `select u.id, r.role_name, u.phone_number from users u join roles r on u.role_id = r.id WHERE u.id = $1`;
     const values = [params.userId];
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
@@ -39,11 +35,11 @@ const getUserDetail = (params) => {
 };
 
 
-const insertUser = (data) => {
+const insertUser = (data, hashedPassword) => {
   return new Promise((resolve, reject) => { 
-    const sqlQuery = `insert into users (email, password, phone_number, address, display_name, first_name, last_name, birth_day, role_id, gender_id) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
+    const sqlQuery = `insert into users (email, pass, role_id, phone_number) values ($1, $2, $3, $4) RETURNING *`;
     // parameterized query
-    const values = [data.email, data.password, data.phone_number, data.address, data.display_name, data.first_name, data.last_name, data.birth_day, data.role_id, data.gender_id];
+    const values = [data.email, hashedPassword, data.role_id, parseInt(data.phone_number)];
     db.query(sqlQuery, values, (err, result) => {
       if(err) {
         reject (err);
@@ -56,21 +52,17 @@ const insertUser = (data) => {
 
 const updateUser = (params, data) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `update users set email = $1, password = $2, phone_number = $3, address = $4, display_name = $5, first_name = $6, last_name = $7, birth_day = $8, role_id = $9, gender_id = $10 where id = $11 RETURNING *;`;
-    const values = [
-      data.email,
-      data.password,
-      data.phone_number,
-      data.address,
-      data.display_name,
-      data.first_name,
-      data.last_name,
-      data.birth_day,
-      data.role_id,
-      data.gender_id,
-      params.userId
-    ];
-    db.query(sqlQuery, values, (err, result) => {
+    const fields = Object.keys(data);
+    const values = fields.map((field) => data[field]);
+    const setValues = fields
+      .map((field, index) => `${field} = $${index + 1}`)
+      .join(", ");
+    const sqlQuery = `UPDATE users SET ${setValues} WHERE id = $${
+      fields.length + 1
+    } RETURNING *`;
+    const valuesWithId = [...values, params.userId];
+
+    db.query(sqlQuery, valuesWithId, (err, result) => {
       if (err) {
         reject(err);
         return;
@@ -79,6 +71,7 @@ const updateUser = (params, data) => {
     });
   });
 };
+
 
 const deleteUser = (params) => {
   return new Promise((resolve, reject) => {
