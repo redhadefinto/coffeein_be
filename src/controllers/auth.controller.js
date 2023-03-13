@@ -26,6 +26,7 @@ const login = async (req, res) => {
       id,
       role_id,
     };
+
     const jwtOptions = {
       expiresIn: "30m"
     };
@@ -85,7 +86,10 @@ const editPassword = async (req, res) => {
     // masukan new password ke dalam db
     await authModels.editPassword(hashedPassword, authInfo.id);
     // generate new token
-    const newToken = jwt.sign({ id: authInfo.id}, env.jwtSecret);
+    const newToken = jwt.sign(
+      { id: authInfo.id },
+      env.jwtSecret
+    );
     res.status(200).json({
       msg: "Edit Password Success",
       token: newToken
@@ -177,7 +181,9 @@ const forgot = async (req, res) => {
 const logOut = async (req, res) => {
   try {
     const { authInfo } = req;
-    await authModels.logOut(authInfo.id);
+    const oldToken =  await authModels.getToken(authInfo.id);
+    // console.log(oldToken)
+    await authModels.createBlackList(oldToken.rows[0].token, authInfo.id);
     res.status(200).json({
       msg: "Log Out Berhasil"
     });
@@ -188,6 +194,8 @@ const logOut = async (req, res) => {
     });
   }
 };
+
+
 
 module.exports = {
   login,

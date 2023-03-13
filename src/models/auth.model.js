@@ -107,11 +107,41 @@ const forgot = (email, password) => {
   });
 };
 
-const logOut = (userid) => {
+// const logOut = (userid) => {
+//   return new Promise((resolve, reject) => {
+//     const sqlQuery = `update users set token = null where id = $1`;
+//     db.query(sqlQuery, [userid], (err, result) => {
+//       if(err) reject(err);
+//       resolve(result);
+//     });
+//   });
+// };
+const getToken = (userId) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `update users set token = null where id = $1`;
-    db.query(sqlQuery, [userid], (err, result) => {
-      if(err) reject(err);
+    const sqlQuery = `select token from users where id = $1`;
+    db.query(sqlQuery, [userId], (err, result) => {
+        if(err) reject(err);
+        resolve(result);
+    });
+  });
+};
+
+const createBlackList = (token, userId) => {
+  // console.log(token)
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `update users set black_list = $1 where id = $2`;
+    db.query(sqlQuery, [token, userId], (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+};
+
+const getBlackList = (token) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `SELECT black_list FROM users WHERE token = $1`;
+    db.query(sqlQuery, [token], (err, result) => {
+      if (err) reject(err);
       resolve(result);
     });
   });
@@ -127,5 +157,7 @@ module.exports = {
   forgot,
   createToken,
   deleteToken,
-  logOut
+  getToken,
+  createBlackList,
+  getBlackList
 };

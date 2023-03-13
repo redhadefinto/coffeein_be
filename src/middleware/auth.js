@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../configs/environment');
 
+const authModels = require('../models/auth.model');
+
 const checkToken = (req, res, next) => {
   // ambil token dari header
   const bearerToken = req.header("Authorization");
@@ -11,7 +13,13 @@ const checkToken = (req, res, next) => {
     msg: "Silahkan Login Terlebih Dahulu",
   });
   const token = bearerToken.split(" ")[1];
-  jwt.verify(token, jwtSecret, (err, payload) => {
+  jwt.verify(token, jwtSecret, async (err, payload) => {
+    const blackList = await authModels.getBlackList(token);
+    if(token === blackList.rows[0].black_list) {
+      res.status(401).json({
+        msg: "please login first",
+      });
+    }
     // jika tidak, maka tolak akses 
     if (err && err.name) return res.status(403).json({
       msg: err.message
@@ -20,6 +28,7 @@ const checkToken = (req, res, next) => {
       return res.status(500).json({
         msg: "Internal Server Error",
       });
+      // if()
       // jika valid, maka lanjut ke controller
       // attach payload ke object request
       req.authInfo = payload;
