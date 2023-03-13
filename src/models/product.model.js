@@ -97,10 +97,26 @@ const insertProduct = (data) => {
   });
 };  
 
-const updateProduct = (params, data) => {
+const updateProduct = (body, params, file) => {
+  // const { body, params } = req;
   return new Promise((resolve, reject) => {
-    const sqlQuery = `update products set product_name = $1, price = $2, category_id = $3, image = $4 where id = $5 RETURNING *;`;
-    const values = [data.product_name, data.price, data.category_id, data.image, params.productId];
+    let sqlQuery = "UPDATE products SET ";
+    let values = [];
+    let i = 1;
+    for (const [key, val] of Object.entries(body)) {
+      sqlQuery += `"${key}" = $${i}, `;
+      values.push(val);
+      i++;
+    }
+    // console.log(i)
+    if(file) { 
+    const fileLink = `/images/${file.filename}`;
+            sqlQuery += `image = '${fileLink}', `; }
+    // console.log(req.file.filename);
+    sqlQuery = sqlQuery.slice(0, -2);
+    // console.log(sqlQuery);
+    sqlQuery += ` WHERE id = $${i} RETURNING *`;
+    values.push(params.productId);
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
         reject(err);
@@ -110,6 +126,7 @@ const updateProduct = (params, data) => {
     });
   });
 };
+
 
 const deleteProduct = (params) => {
   return new Promise((resolve, reject) => {

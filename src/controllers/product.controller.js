@@ -73,8 +73,8 @@ const insertProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
-    const { params, body } = req;
-    const result = await productsModel.updateProduct(params, body);
+    const { body, params, file } = req;
+    const result = await productsModel.updateProduct(body, params, file);
     res.status(200).json({
       data: result.rows,
       msg: "Update Success"

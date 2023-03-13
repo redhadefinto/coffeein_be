@@ -11,6 +11,31 @@ const userVerification = (body) => {
   });
 };
 
+const createToken = (token, body) => {
+  return new Promise((resolve, reject) => {
+    // verifikasi ke db
+    const sqlQuery = `update users set token = $1 where email = $2`;
+    db.query(sqlQuery, [token, body.email], (err, result) => {
+      if(err) reject(err);
+      resolve(result);
+    });
+  });
+};
+
+const deleteToken = (body) => {
+  return new Promise((resolve, reject) => {
+    // delete token from database
+    const sqlQuery = `update users set token = null where email = $1`;
+    db.query(sqlQuery, [body.email], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
 const getPassword = (userId) => {
   return new Promise((resolve, reject) => {
     const sql = `SELECT u.pass From users u WHERE id = $1`;
@@ -82,6 +107,16 @@ const forgot = (email, password) => {
   });
 };
 
+const logOut = (userid) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `update users set token = null where id = $1`;
+    db.query(sqlQuery, [userid], (err, result) => {
+      if(err) reject(err);
+      resolve(result);
+    });
+  });
+};
+
 module.exports = {
   userVerification,
   getPassword,
@@ -89,5 +124,8 @@ module.exports = {
   register,
   createOtp,
   getOtp,
-  forgot
+  forgot,
+  createToken,
+  deleteToken,
+  logOut
 };

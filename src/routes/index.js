@@ -24,10 +24,10 @@ masterRouter.use("/users", usersRouter);
 masterRouter.use("/products", productsRouter);
 masterRouter.use('/promo', promoRouter);
 masterRouter.use('/history', historyRouter);
-masterRouter.use('/product/image', express.static('images'));
 masterRouter.use('/auth', authRouter);
 masterRouter.use("/", welcomeRouter);
 masterRouter.use("/transactions", transactionRouter);
+masterRouter.use("/images", express.static('./public/images'));
 
 
 module.exports = masterRouter;

@@ -25,14 +25,14 @@ const login = async (req, res) => {
     const payload = {
       id,
       role_id,
-      iat: Math.floor(Date.now() / 1000),
     };
     const jwtOptions = {
-      expiresIn: "5m"
+      expiresIn: "30m"
     };
     // buat token
-    jwt.sign(payload, env.jwtSecret, jwtOptions, (err, token) => {
+    jwt.sign(payload, env.jwtSecret, jwtOptions, async (err, token) => {
       if(err) throw err;
+      await authModels.createToken(token, body);
       res.status(200).json({
         msg: "Selamat Datang",
         token,
@@ -79,6 +79,7 @@ const editPassword = async (req, res) => {
       msg: "Password Lama Salah"
     });
     // jika valid, maka edit password
+    await authModels.deleteToken(body);
     // enkripsi password baru
     const hashedPassword = await bcrypt.hash(body.newPass, 10);
     // masukan new password ke dalam db
@@ -173,6 +174,21 @@ const forgot = async (req, res) => {
   }
 };
 
+const logOut = async (req, res) => {
+  try {
+    const { authInfo } = req;
+    await authModels.logOut(authInfo.id);
+    res.status(200).json({
+      msg: "Log Out Berhasil"
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "Internal Server Error"
+    });
+  }
+};
+
 module.exports = {
   login,
   privateAcces,
@@ -180,5 +196,6 @@ module.exports = {
   roleAcces,
   register,
   createOtp,
-  forgot
+  forgot,
+  logOut
 };

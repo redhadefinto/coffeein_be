@@ -19,6 +19,7 @@ authRouter.post('/register', authController.register);
 
 authRouter.patch('/otp', authController.createOtp);
 authRouter.patch('/forgot', authController.forgot);
+authRouter.patch('/logout', authMiddleware.checkToken, authController.logOut);
 
 
 module.exports = authRouter;
