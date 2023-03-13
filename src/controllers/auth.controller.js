@@ -25,6 +25,7 @@ const login = async (req, res) => {
     const payload = {
       id,
       role_id,
+      iat: Math.floor(Date.now() / 1000),
     };
     const jwtOptions = {
       expiresIn: "5m"
@@ -83,9 +84,86 @@ const editPassword = async (req, res) => {
     // masukan new password ke dalam db
     await authModels.editPassword(hashedPassword, authInfo.id);
     // generate new token
+    const newToken = jwt.sign({ id: authInfo.id}, env.jwtSecret);
     res.status(200).json({
       msg: "Edit Password Success",
-      // token
+      token: newToken
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "Internal Server Error"
+    });
+  }
+};
+
+const register = async (req, res) => {
+  try {
+    const { body } = req;
+    const pass = body.password;
+    const hashedPassword = await bcrypt.hash(pass, 10);
+    const result = await authModels.register(body, hashedPassword);
+    res.status(201).json({
+      data: result.rows,
+      msg: "Create Success",
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({
+      msg: "Internal Server Error",
+    });
+  }
+};
+
+const createOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const generateOTP = () => {
+      // Panjang OTP
+      const OTP_LENGTH = 6;
+      // Karakter yang digunakan untuk menghasilkan OTP
+      const OTP_CHARS =
+        "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+      let otp = "";
+      for (let i = 0; i < OTP_LENGTH; i++) {
+        otp += OTP_CHARS.charAt(Math.floor(Math.random() * OTP_CHARS.length));
+      }
+      return otp;
+    };
+    const otp = generateOTP().toString();
+    const result = await authModels.createOtp(email, otp);
+    if(result.rows < 1) {
+      res.status(404).json({
+        msg: 'Email Belum Terdaftar'
+      });
+    }
+    // const data = result.rows[0]; 
+    res.status(200).json({
+      otp: result.rows[0].otp,
+      msg: "Create Otp"
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "Internal Server Error"
+    });
+  }
+};
+
+const forgot = async (req, res) => {
+  try {
+    const { email, otp, password } = req.body;
+    const otpFromDb = await authModels.getOtp(email);
+    if(otpFromDb.rows[0].otp !== otp) {
+      res.status(404).json({
+        msg: "OTP Not valid"
+      });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await authModels.forgot(email, hashedPassword);
+    res.status(200).json({
+      msg: "Change password Success"
     });
   } catch (error) {
     console.log(error);
@@ -99,5 +177,8 @@ module.exports = {
   login,
   privateAcces,
   editPassword,
-  roleAcces
+  roleAcces,
+  register,
+  createOtp,
+  forgot
 };

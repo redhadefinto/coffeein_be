@@ -15,4 +15,10 @@ authRouter.patch('/', authMiddleware.checkToken, authController.editPassword);
 //private
 authRouter.get("/private", authMiddleware.checkToken, authController.privateAcces);
 
+authRouter.post('/register', authController.register);
+
+authRouter.patch('/otp', authController.createOtp);
+authRouter.patch('/forgot', authController.forgot);
+
+
 module.exports = authRouter;
