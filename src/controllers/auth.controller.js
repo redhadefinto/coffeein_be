@@ -196,7 +196,6 @@ const logOut = async (req, res) => {
 };
 
 
-
 module.exports = {
   login,
   privateAcces,

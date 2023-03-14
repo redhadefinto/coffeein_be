@@ -8,7 +8,7 @@ const getUsers = async (req, res) => {
     if (result.rows.length === 0) {
       res.status(404).json({
         data: result.rows,
-        msg: "Product Tidak Ditemukan",
+        msg: "Users Tidak Ditemukan",
       });
       return;
     }
