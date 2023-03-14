@@ -82,11 +82,16 @@ const getProductDetail = (params) => {
   });
 };
 
-const insertProduct = (data) => {
+const insertProduct = (data, file) => {
   return new Promise((resolve, reject) => { 
-    const sqlQuery = `insert into products (product_name, price, category_id, image) values ($1, $2, $3, $4) RETURNING *`;
+    const sqlQuery = `insert into products (product_name, price, category_id, image) values ($1, $2, $3) RETURNING *`;
     // parameterized query
-    const values = [data.product_name, data.price, data.category_id, data.image];
+    let fileLink = "";
+    if(file) {
+      fileLink = ` /images/${file.filename}`;
+    };
+
+    const values = [data.product_name, data.price, data.category_id, fileLink];
     db.query(sqlQuery, values, (err, result) => {
       if(err) {
         reject (err);

@@ -107,6 +107,13 @@ const register = async (req, res) => {
     const { body } = req;
     const pass = body.password;
     const hashedPassword = await bcrypt.hash(pass, 10);
+    const emailFromDb = await authModels.getEmail(body);
+    if(emailFromDb.rows.length === 1) {
+      res.status(400).json({
+        msg: "Email already exists",
+      });
+      // return;
+    }
     const result = await authModels.register(body, hashedPassword);
     res.status(201).json({
       data: result.rows,

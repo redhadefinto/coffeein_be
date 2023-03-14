@@ -10,7 +10,7 @@ const checkToken = (req, res, next) => {
   // bearer namaToken
   // verifikasi token 
   if(!bearerToken) return res.status(403).json({
-    msg: "Silahkan Login Terlebih Dahulu",
+    msg: "please login first",
   });
   const token = bearerToken.split(" ")[1];
   jwt.verify(token, jwtSecret, async (err, payload) => {
@@ -40,7 +40,7 @@ const checkRole = (req, res, next) => {
   const role = req.authInfo.role_id; 
   if(role !== 1) {
     return res.status(403).json({
-      msg: "Tidak diizinkan, Hanya admin yang boleh mengakses."
+      msg: "Not allowed, Only admins should access.",
     });
   }
   next();

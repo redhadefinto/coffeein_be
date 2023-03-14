@@ -57,8 +57,8 @@ const getProductDetail = async (req, res) => {
 
 const insertProduct = async (req, res) => {
   try {
-    const { body } = req;
-    const result = await productsModel.insertProduct(body);
+    const { body, file } = req;
+    const result = await productsModel.insertProduct(body, file);
     res.status(201).json({
       data: result.rows,
       msg: "Create Success"
