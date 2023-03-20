@@ -9,4 +9,8 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
-module.exports = client;
+module.exports = {
+  client, 
+  comments: client.db("sample_mflix").collection("comments"),
+  error: client.db('log').collection('error')
+};

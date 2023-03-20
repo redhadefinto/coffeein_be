@@ -3,30 +3,33 @@ const { jwtSecret } = require('../configs/environment');
 
 const authModels = require('../models/auth.model');
 
+const error = require("../utils/response");
+
 const checkToken = (req, res, next) => {
   // ambil token dari header
   const bearerToken = req.header("Authorization");
   // via authorization header berbentuk bearer token
   // bearer namaToken
   // verifikasi token 
-  if(!bearerToken) return res.status(403).json({
-    msg: "please login first",
-  });
+  if(!bearerToken) return error(res, {status: 403, message: "Silahkan Login Terlebih Dahulu"});
+  
   const token = bearerToken.split(" ")[1];
   jwt.verify(token, jwtSecret, async (err, payload) => {
     const blackList = await authModels.getBlackList(token);
     if(token === blackList.rows[0].black_list) {
-      res.status(401).json({
+    return res.status(401).json({
         msg: "please login first",
       });
     }
     // jika tidak, maka tolak akses 
-    if (err && err.name) return res.status(403).json({
-      msg: err.message
+    if (err && err.name) return error(res, {
+      status: 403,
+      message: err.message,
     });
     if(err)
-      return res.status(500).json({
-        msg: "Internal Server Error",
+      return error(res, {
+        status: 500,
+        message: err.message,
       });
       // if()
       // jika valid, maka lanjut ke controller

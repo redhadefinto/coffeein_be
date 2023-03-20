@@ -17,6 +17,8 @@ const historyRouter = require('./history.route');
 const express = require('express');
 const authRouter = require('./auth.route');
 const transactionRouter = require('./transaction.route');
+const commentsRouter = require('./comments.route');
+const errorRouter = require('./error.router');
 
 const masterRouter = Router();
 masterRouter.use("/", welcomeRouter);
@@ -28,6 +30,8 @@ masterRouter.use('/auth', authRouter);
 masterRouter.use("/", welcomeRouter);
 masterRouter.use("/transactions", transactionRouter);
 masterRouter.use("/images", express.static('./public/images'));
+masterRouter.use('/comments', commentsRouter);
+masterRouter.use("/error", errorRouter);
 
 
 module.exports = masterRouter;

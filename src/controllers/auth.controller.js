@@ -112,7 +112,7 @@ const register = async (req, res) => {
       res.status(400).json({
         msg: "Email already exists",
       });
-      // return;
+      return;
     }
     const result = await authModels.register(body, hashedPassword);
     res.status(201).json({

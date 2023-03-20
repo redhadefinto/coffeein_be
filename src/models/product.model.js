@@ -47,12 +47,11 @@ const getMetaProducts = (query) => {
       const page = parseInt(query.page) || 1;
       const limit = parseInt(query.limit) || 5;
       const totalPage = Math.ceil(totalData / limit);
-      let next = "";
-      let prev = "";
-      if (page === 1) prev = null;
-      if (page === totalPage) next = null;
-      if (page !== 1) prev = page - 1;
-      if (page !== totalPage) next = page + 1;
+      let next = null;
+      let prev = null;
+      if (page > 1) prev = `localhost:8080/products?page=${page - 1}&limit=${limit}`;
+      if (page < totalPage) next = `localhost:8080/products?page=${page + 1}&limit=${limit}`;
+      
       
       const meta = {
         totalData,
@@ -89,7 +88,7 @@ const insertProduct = (data, file) => {
     let fileLink = "";
     if(file) {
       fileLink = ` /images/${file.filename}`;
-    };
+    }
 
     const values = [data.product_name, data.price, data.category_id, fileLink];
     db.query(sqlQuery, values, (err, result) => {
