@@ -11,4 +11,4 @@ const error = (res, {status, message}) => {
   });
 };
 
-module.exports = error; 
+module.exports = {error}; 

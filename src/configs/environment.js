@@ -9,5 +9,8 @@ module.exports = {
   mongoPass: process.env.MONGO_PWD,
   mongoDbName: process.env.MONGO_DBNAME,
   mongoDbHost: process.env.MONGO_HOST,
-  mongoDbUser: process.env.MONGO_USER
+  mongoDbUser: process.env.MONGO_USER,
+  cloudinaryName: process.env.CLOUD_NAME,
+  cloudinaryKey: process.env.CLOUD_KEY,
+  cloudinarySecret: process.env.CLOUD_SECRET,
 };
