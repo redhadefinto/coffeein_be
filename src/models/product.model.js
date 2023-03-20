@@ -10,6 +10,10 @@ const getProducts = (query) => {
       sqlQuery += ` WHERE lower(p.product_name) LIKE lower('%${query.name}%')`;
     }
 
+    if (query.categories) {
+      sqlQuery += ` WHERE lower(c.category_name) LIKE lower('%${query.categories}%')`;
+    }
+
     let order = "p.id ASC";
     if (query.order === "cheapest") order = "p.price ASC";
     if (query.order === "priciest") order = "p.price DESC";
