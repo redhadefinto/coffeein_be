@@ -11,7 +11,7 @@ const getProducts = (query) => {
     }
 
     if (query.categories) {
-      sqlQuery += ` WHERE lower(p.category_id) LIKE lower('%${query.categories}%')`;
+      sqlQuery += ` WHERE p.category_id = ${query.categories}`;
     }
 
     let order = "p.id ASC";
