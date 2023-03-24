@@ -16,7 +16,7 @@ const login = async (req, res) => {
     });
     const {id, role_id, pass } = result.rows[0];
     // compare password
-    const isPasswordValid = await bcrypt.compare(body.pass, pass);
+    const isPasswordValid = await bcrypt.compare(body.password, pass);
     if (!isPasswordValid)
       return res.status(401).json({
         msg: "Email/Password Salah",
