@@ -20,6 +20,7 @@ const transactionRouter = require('./transaction.route');
 const commentsRouter = require('./comments.route');
 const errorRouter = require('./error.router');
 const cloudRouter = require('./cloud.route');
+const profileRouter = require('./profile.route');
 
 const masterRouter = Router();
 masterRouter.use("/", welcomeRouter);
@@ -34,6 +35,6 @@ masterRouter.use("/images", express.static('./public/images'));
 masterRouter.use('/comments', commentsRouter);
 masterRouter.use("/error", errorRouter);
 masterRouter.use("/cloud", cloudRouter);
-
+masterRouter.use("/profile", profileRouter);
 
 module.exports = masterRouter;

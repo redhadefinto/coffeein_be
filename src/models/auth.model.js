@@ -57,9 +57,9 @@ const editPassword = (newPass, userId) => {
 };
 
 const register = (data, hashedPassword) => {
-  console.log(data);
+  // console.log(data);
   return new Promise((resolve, reject) => {
-    const sqlQuery = `insert into users (email, pass, phone_number) values ($1, $2, $3) RETURNING *`;
+    const sqlQuery = `insert into users (email, pass, phone_number) values ($1, $2, $3) RETURNING email, phone_number`;
     // parameterized query
     const values = [
       data.email,
@@ -80,6 +80,16 @@ const getEmail = (body) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = "select email from users where email = $1";
     db.query(sqlQuery, [body.email], (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+};
+
+const getIdUsers = () => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = "select MAX(id) from users";
+    db.query(sqlQuery, (err, result) => {
       if (err) reject(err);
       resolve(result);
     });
@@ -170,5 +180,6 @@ module.exports = {
   getToken,
   createBlackList,
   getBlackList,
-  getEmail
+  getEmail,
+  getIdUsers
 };

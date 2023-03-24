@@ -3,7 +3,7 @@ const { jwtSecret } = require('../configs/environment');
 
 const authModels = require('../models/auth.model');
 
-const error = require("../utils/response");
+const {error} = require("../utils/response");
 
 const checkToken = (req, res, next) => {
   // ambil token dari header
@@ -15,17 +15,19 @@ const checkToken = (req, res, next) => {
   
   const token = bearerToken.split(" ")[1];
   jwt.verify(token, jwtSecret, async (err, payload) => {
-    const blackList = await authModels.getBlackList(token);
-    if(token === blackList.rows[0].black_list) {
-    return res.status(401).json({
-        msg: "please login first",
-      });
-    }
     // jika tidak, maka tolak akses 
     if (err && err.name) return error(res, {
       status: 403,
       message: err.message,
     });
+    const blackList = await authModels.getBlackList(token);
+    console.log(blackList.rows);
+      if(token === blackList.rows[0].black_list) {
+      res.status(401).json({
+          msg: "please login first",
+        });
+        return;
+      }
     if(err)
       return error(res, {
         status: 500,

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const authModels = require('../models/auth.model');
 const bcrypt = require('bcrypt');
-
+const profileModels = require('../models/profile.model');
 const env = require('../configs/environment');
 
 const login = async (req, res) => {
@@ -114,6 +114,10 @@ const register = async (req, res) => {
       });
       return;
     }
+    const idFromDb = await authModels.getIdUsers();
+    const idUser = idFromDb.rows[0].max + 1;
+    console.log(idUser);
+    await profileModels.insertProfile(idUser);
     const result = await authModels.register(body, hashedPassword);
     res.status(201).json({
       data: result.rows,
