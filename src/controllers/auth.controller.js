@@ -116,11 +116,12 @@ const register = async (req, res) => {
     }
     const idFromDb = await authModels.getIdUsers();
     const idUser = idFromDb.rows[0].nextval + 1;
-    console.log(idFromDb.rows[0]);
+    // console.log(idFromDb.rows[0]);
     await profileModels.insertProfile(idUser);
     const result = await authModels.register(body, hashedPassword);
     res.status(201).json({
       data: result.rows,
+      nextval: idUser,
       msg: "Create Success",
     });
   } catch (err) {
