@@ -21,7 +21,13 @@ const checkToken = (req, res, next) => {
       message: err.message,
     });
     const blackList = await authModels.getBlackList(token);
-    console.log(blackList.rows);
+    // console.log(blackList.rows);
+    if(!blackList.rows[0]) {
+      res.status(401).json({
+        msg: "please login first",
+      });
+      return;
+    } 
       if(token === blackList.rows[0].black_list) {
       res.status(401).json({
           msg: "please login first",

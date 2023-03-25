@@ -36,6 +36,7 @@ const insertProfile = (id) => {
 };
 
 const updateProfile = (id, data) => {
+  console.log(data);
   return new Promise((resolve, reject) => {
     let sqlQuery = "UPDATE profile SET ";
     let values = [];
@@ -57,6 +58,28 @@ const updateProfile = (id, data) => {
     });
   });
 };
+
+// const updateProfileImage = (id, data) => {
+//   return new Promise((resolve, reject) => {
+//     const sqlQuery = `insert into profile (id, first_name, image) values ($1, $2, $3)`;
+//     // parameterized query
+//     db.query(
+//       sqlQuery,
+//       [
+//         parseInt(id),
+//         `guest`,
+//         "https://res.cloudinary.com/ddfixt2hr/image/upload/v1679733467/coffe_shop_users/users-image-1.webp",
+//       ],
+//       (err, result) => {
+//         if (err) {
+//           reject(err);
+//           return;
+//         }
+//         resolve(result);
+//       }
+//     );
+//   });
+// };
 
 module.exports = {
   getProfile,
