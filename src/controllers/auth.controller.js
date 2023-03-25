@@ -116,7 +116,7 @@ const register = async (req, res) => {
     }
     const idFromDb = await authModels.getIdUsers();
     const idUser = idFromDb.rows[0].max + 1;
-    console.log(idUser);
+    // console.log(idUser);
     await profileModels.insertProfile(idUser);
     const result = await authModels.register(body, hashedPassword);
     res.status(201).json({
