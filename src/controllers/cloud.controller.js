@@ -27,7 +27,7 @@ const cloudeUploadUsers = async (req, res) => {
     if(err) throw {msg, err};
     if(!data) return res.status(200).json({msg: "No File Uploaded"});
     const urlImage = data.secure_url;
-    await profileModel.updateProfile(id, urlImage);
+    await profileModel.updateProfile(id, {image: urlImage});
     res.status(201).json({
       data, msg
     });
