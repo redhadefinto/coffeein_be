@@ -15,15 +15,23 @@ const getProfile = (id) => {
 
 const insertProfile = (id) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `insert into profile (id, first_name) values ($1, $2)`;
+    const sqlQuery = `insert into profile (id, first_name, image) values ($1, $2, $3)`;
     // parameterized query
-    db.query(sqlQuery, [parseInt(id),`guest`], (err, result) => {
-      if (err) {
-        reject(err);
-        return;
+    db.query(
+      sqlQuery,
+      [
+        parseInt(id),
+        `guest`,
+        "https://res.cloudinary.com/ddfixt2hr/image/upload/v1679733467/coffe_shop_users/users-image-1.webp",
+      ],
+      (err, result) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(result);
       }
-      resolve(result);
-    });
+    );
   });
 };
 
