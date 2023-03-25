@@ -1,5 +1,6 @@
 const {uploader, uploaderUsers} = require('../utils/cloudinary');
 const response = require("../utils/response");
+const profileModel = require('../models/profile.model');
 
 const cloudeUpload = async (req, res) => {
   try {
@@ -25,6 +26,8 @@ const cloudeUploadUsers = async (req, res) => {
     const { data, err, msg } = await uploaderUsers(req, "users", id);
     if(err) throw {msg, err};
     if(!data) return res.status(200).json({msg: "No File Uploaded"});
+    const urlImage = data.secure_url;
+    await profileModel.updateProfile(id, {image: urlImage});
     res.status(201).json({
       data, msg
     });
