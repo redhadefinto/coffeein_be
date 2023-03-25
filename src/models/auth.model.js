@@ -88,7 +88,7 @@ const getEmail = (body) => {
 
 const getIdUsers = () => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = "select nextval('users_id_seq')";
+    const sqlQuery = "select MAX(id) from users";
     db.query(sqlQuery, (err, result) => {
       if (err) reject(err);
       resolve(result);

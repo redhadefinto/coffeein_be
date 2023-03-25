@@ -114,16 +114,15 @@ const register = async (req, res) => {
       });
       return;
     }
-    const idFromDb = await authModels.getIdUsers();
-    const idUser = idFromDb.rows[0].nextval + 1;
-    // console.log(idFromDb.rows[0]);
-    await profileModels.insertProfile(idUser);
     const result = await authModels.register(body, hashedPassword);
     res.status(201).json({
       data: result.rows,
-      nextval: idUser,
       msg: "Create Success",
     });
+    const idFromDb = await authModels.getIdUsers();
+    const idUser = parseInt(idFromDb.rows[0].max);
+    // console.log(idFromDb.rows[0]);
+    await profileModels.insertProfile(idUser);
   } catch (err) {
     console.log(err.message);
     res.status(500).json({
