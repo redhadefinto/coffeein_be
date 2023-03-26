@@ -37,6 +37,7 @@ const login = async (req, res) => {
       res.status(200).json({
         msg: "Selamat Datang",
         token,
+        id
       });
     });
   } catch (error) {
