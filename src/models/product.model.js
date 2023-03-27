@@ -11,7 +11,7 @@ const getProducts = (query) => {
     }
 
     if (query.categories) {
-      sqlQuery += ` WHERE p.category_id = ${query.categories}`;
+      sqlQuery += ` AND p.category_id = ${query.categories}`;
     }
 
     let order = "p.id ASC";
