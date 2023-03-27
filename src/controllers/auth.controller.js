@@ -21,12 +21,13 @@ const login = async (req, res) => {
       return res.status(401).json({
         msg: "Email/Password Salah",
       });
-
+    const getProfileFromDb = await profileModels.getProfileImage(id);
     const payload = {
       id,
       role_id,
+      image: getProfileFromDb.rows[0].image
     };
-
+    // console.log(payload)
     const jwtOptions = {
       expiresIn: "30m"
     };
@@ -37,7 +38,6 @@ const login = async (req, res) => {
       res.status(200).json({
         msg: "Selamat Datang",
         token,
-        id
       });
     });
   } catch (error) {

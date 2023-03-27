@@ -13,6 +13,19 @@ const getProfile = (id) => {
   });
 };
 
+const getProfileImage = (id) => {
+  return new Promise((resolve, reject) => {
+    let sqlQuery = `select image from profile where id = $1`;
+    db.query(sqlQuery, [id], (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result);
+    });
+  });
+};
+
 const insertProfile = (id) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `insert into profile (id, first_name, image) values ($1, $2, $3)`;
@@ -84,5 +97,6 @@ const updateProfile = (id, data) => {
 module.exports = {
   getProfile,
   insertProfile,
-  updateProfile
+  updateProfile,
+  getProfileImage
 };
