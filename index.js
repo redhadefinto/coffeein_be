@@ -34,7 +34,7 @@ app.use(masterRouter);
 //     console.log(`Server is running at port ${serverPort}`);
 //   });
 // }).catch((err) => console.log(err));
-
+"use strict";
 const mongoose = require('mongoose');
 const { mongoPass, mongoDbName, mongoDbHost, mongoDbUser } = require("./src/configs/environment");
 
