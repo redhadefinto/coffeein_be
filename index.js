@@ -37,16 +37,14 @@ app.use(masterRouter);
 const mongoose = require('mongoose');
 const { mongoPass, mongoDbName, mongoDbHost, mongoDbUser } = require("./src/configs/environment");
 
-mongoose.connect(
-  `mongodb+srv://${mongoDbUser}:${mongoPass}@${mongoDbHost}/${mongoDbName}?retryWrites=true&w=majority`
-).then(() => {
-  console.log("Mongo Db Connected");
+mongoose
+  .connect(
+    `mongodb+srv://${mongoDbUser}:${mongoPass}@${mongoDbHost}/${mongoDbName}?retryWrites=true&w=majority`
+  )
+  .then(() => {
+    console.log("Mongo Db Connected");
     app.listen(serverPort, () => {
       console.log(`Server is running at port ${serverPort}`);
     });
   })
   .catch((err) => console.log(err));
-
-module.export = {
-  mongoose
-};
