@@ -53,12 +53,8 @@ const getMetaProducts = (query) => {
       const totalPage = Math.ceil(totalData / limit);
       let next = null;
       let prev = null;
-      if (page > 1) prev = `/products?page=${
-        page - 1
-      }&limit=${limit}`;
-      if (page < totalPage) next = `/products?page=${
-        page + 1
-      }&limit=${limit}`;
+      if (page > 1) prev = `/products?page=${page - 1}&limit=${limit}`;
+      if (page < totalPage) next = `/products?page=${page + 1}&limit=${limit}`;
       
       
       const meta = {
