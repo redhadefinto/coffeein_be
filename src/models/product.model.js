@@ -49,12 +49,16 @@ const getMetaProducts = (query) => {
 
       const totalData = parseInt(result.rows[0].total_data);
       const page = parseInt(query.page) || 1;
-      const limit = parseInt(query.limit) || 5;
+      const limit = parseInt(query.limit) || 8;
       const totalPage = Math.ceil(totalData / limit);
       let next = null;
       let prev = null;
-      if (page > 1) prev = `/products?page=${page - 1}&limit=${limit}`;
-      if (page < totalPage) next = `/products?page=${page + 1}&limit=${limit}`;
+      if (page > 1) prev = `https://coffe-shop-nu.vercel.app/products?page=${
+        page - 1
+      }&limit=${limit}`;
+      if (page < totalPage) next = `https://coffe-shop-nu.vercel.app/products?page=${
+        page + 1
+      }&limit=${limit}`;
       
       
       const meta = {
