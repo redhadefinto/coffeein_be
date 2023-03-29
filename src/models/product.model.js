@@ -63,12 +63,12 @@ const getMetaProducts = (query) => {
       };
       
       
-      const meta = [{
+      const meta = {
         totalData,
         next,
         prev,
         totalPage,
-      }];
+      };
       resolve(meta);
     });
   });
