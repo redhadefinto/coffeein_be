@@ -12,5 +12,5 @@ const client = new MongoClient(uri, {
 module.exports = {
   client, 
   // comments: client.db("sample_mflix").collection("comments"),
-  error: client.db('log').collection('error')
+  error: client.db('log').collection('errors')
 };

@@ -29,7 +29,7 @@ masterRouter.use("/products", productsRouter);
 masterRouter.use('/promo', promoRouter);
 masterRouter.use('/history', historyRouter);
 masterRouter.use('/auth', authRouter);
-masterRouter.use("/", welcomeRouter);
+// masterRouter.use("/", welcomeRouter);
 masterRouter.use("/transactions", transactionRouter);
 masterRouter.use("/images", express.static('./public/images'));
 masterRouter.use('/comments', commentsRouter);
