@@ -1,23 +1,23 @@
 // const commentsModel = require('../models/comments.model');
-const { comments, error } = require('../configs/mongo')
+const { error } = require('../configs/mongo');
 
 
-const getAllComments = async (req, res) => {
-  try {
-    // const result = await comments.find({}).toArray();
-    const result = await error.find({}).toArray();
-    res.status(200).json({
-        data: result,
-        msg: "OK"
-      });
-    // const result = await commentsModel.find();
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      msg: "Internal Server Error"
-    });
-  }
-};
+// const getAllComments = async (req, res) => {
+//   try {
+//     // const result = await comments.find({}).toArray();
+//     const result = await error.find({}).toArray();
+//     res.status(200).json({
+//         data: result,
+//         msg: "OK"
+//       });
+//     // const result = await commentsModel.find();
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       msg: "Internal Server Error"
+//     });
+//   }
+// };
 
 const logError = async (req, res) => {
   try {
@@ -32,6 +32,6 @@ const logError = async (req, res) => {
       msg: "Internal Server Error",
     });
   }
-}
+};
 
-module.exports = { getAllComments, logError }
+module.exports = { logError };

@@ -3,7 +3,7 @@ const { jwtSecret } = require('../configs/environment');
 
 const authModels = require('../models/auth.model');
 
-const {error} = require("../utils/response");
+const { error } = require("../utils/response");
 
 const checkToken = (req, res, next) => {
   // ambil token dari header
