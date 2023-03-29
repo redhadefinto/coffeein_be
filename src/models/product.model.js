@@ -40,16 +40,25 @@ const getProducts = (query) => {
 const getMetaProducts = (query, total) => {
   return new Promise((resolve, reject) => {
     let sqlQuery = `select count(*) as total_data from products p`;
+        if (query.name) {
+          sqlQuery += ` WHERE lower(p.product_name) LIKE lower('%${query.name}%')`;
+        }
 
+        if (query.categories) {
+          if (query.name) {
+            sqlQuery += ` AND p.category_id = ${query.categories}`;
+          } else {
+            sqlQuery += ` WHERE p.category_id = ${query.categories}`;
+          }
+        }
     db.query(sqlQuery, (err, result) => {
       if (err) {
         reject(err);
         return;
       }
-
-      // const totalData = parseInt(result.rows[0]?.total_data || 0);
+      const totalData = parseInt(result.rows[0]?.total_data || 0);
       // console.log(total.length)
-      const totalData = total.length;
+      // const totalData = total.length;
       const page = parseInt(query.page) || 1;
       const limit = parseInt(query.limit) || 8;
       const totalPage = Math.ceil(totalData / limit);
