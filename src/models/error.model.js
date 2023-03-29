@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const errorSchema = require('../schemas/error-schema');
 
 // buat model
-const Error = mongoose.model("error", errorSchema);
+const Error = mongoose.model("errors", errorSchema);
 const logError = async ({status, message}, cb) => {
   try {
     await Error.create({
