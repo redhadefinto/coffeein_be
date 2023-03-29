@@ -37,7 +37,7 @@ const getProducts = (query) => {
 };
 
 
-const getMetaProducts = (query) => {
+const getMetaProducts = (query, total) => {
   return new Promise((resolve, reject) => {
     let sqlQuery = `select count(*) as total_data from products p`;
 
@@ -47,7 +47,9 @@ const getMetaProducts = (query) => {
         return;
       }
 
-      const totalData = parseInt(result.rows[0].total_data);
+      // const totalData = parseInt(result.rows[0]?.total_data || 0);
+      // console.log(total.length)
+      const totalData = total.length;
       const page = parseInt(query.page) || 1;
       const limit = parseInt(query.limit) || 8;
       const totalPage = Math.ceil(totalData / limit);
