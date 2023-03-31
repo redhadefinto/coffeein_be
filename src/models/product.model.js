@@ -37,7 +37,7 @@ const getProducts = (query) => {
 };
 
 
-const getMetaProducts = (query, total) => {
+const getMetaProducts = (query) => {
   return new Promise((resolve, reject) => {
     let sqlQuery = `select count(*) as total_data from products p`;
         if (query.name) {
