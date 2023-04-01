@@ -195,10 +195,12 @@ const forgot = async (req, res) => {
 
 const logOut = async (req, res) => {
   try {
-    const { authInfo } = req;
-    const oldToken =  await authModels.getToken(authInfo.id);
+    // const { authInfo } = req;
+    const {params} = req;
+    // console.log(authInfo.id);
+    const oldToken =  await authModels.getToken(params.id);
     // console.log(oldToken)
-    await authModels.createBlackList(oldToken.rows[0].token, authInfo.id);
+    await authModels.createBlackList(oldToken.rows[0].token, params.id);
     res.status(200).json({
       msg: "Log Out Berhasil"
     });

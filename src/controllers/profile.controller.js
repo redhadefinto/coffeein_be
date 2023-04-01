@@ -3,8 +3,9 @@ const profileModel = require('../models/profile.model');
 const getProfile = async (req, res) => {
   try {
     // const { query } = req;
+    // const {params} = req;
     const { id } = req.authInfo;
-    console.log(id);
+    // console.log(id);
     const result = await profileModel.getProfile(id);
     if (result.rows.length === 0) {
       res.status(404).json({
