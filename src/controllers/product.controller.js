@@ -12,7 +12,7 @@ const getProducts = async (req, res) => {
       });
       return;
     }
-    console.log(result.rows)
+    // console.log(result.rows)
     const meta = await productsModel.getMetaProducts(query, result.rows);
     res.status(200).json({
       data: result.rows,
