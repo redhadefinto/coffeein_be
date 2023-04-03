@@ -3,7 +3,7 @@ const db = require("../configs/postgre");
 const getHistory = (id) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `SELECT h.id, p.product_name, p.price, p.image, s.name, h.quantity
-    FROM history h
+    FROM histories h
     join products p ON h.product_id = p.id
     join users u on h.user_id = u.id
     where u.id = $1`;
@@ -38,7 +38,7 @@ const getHistoryDetail = (params) => {
 
 const insertHistory = (data) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `insert into history (user_id, product_id, status_id, quantity) values ($1, $2, $3, $4) RETURNING *`;
+    const sqlQuery = `insert into histories (user_id, product_id, status_id, quantity) values ($1, $2, $3, $4) RETURNING *`;
     // parameterized query
     const values = [
       data.user_id,
