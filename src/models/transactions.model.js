@@ -63,6 +63,6 @@ const getHistory = (id) => {
       resolve(result);
     });
   });
-}
+};
 
 module.exports = { createTransaction, createDetailTransaction, getTransaction, getHistory };
