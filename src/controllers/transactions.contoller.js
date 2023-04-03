@@ -1,6 +1,6 @@
 const db = require("../configs/postgre");
 
-const transactionModel = require('../models/transactions.model')
+const transactionModel = require('../models/transactions.model');
 
 // create transaction
 // 1. insert ke transaction

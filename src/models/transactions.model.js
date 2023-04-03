@@ -30,7 +30,7 @@ const createDetailTransaction = (client, body, transactionId) => {
 
 const getTransaction = (client, transactionId) => {
   return new Promise((resolve, reject) => {
-    const sql = `select u.email, p.product_name, s."size", pr.code, py."method" as "payment_method", st."name" as "status", tps.quantity, tps.subtotal from transactions_products_sizes tps
+    const sql = `select u.email, p.product_name, p.imagae, s."size", pr.code, py."method" as "payment_method", st."name" as "status", tps.quantity, tps.subtotal from transactions_products_sizes tps
     join transactions t on t.id = tps.transactions_id 
     join products p on p.id = tps.product_id
     join sizes s on s.id = tps.size_id
