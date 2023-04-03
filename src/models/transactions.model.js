@@ -57,7 +57,7 @@ const getHistory = (id) => {
     join users u on u.id = t.user_id
     join payments py on py.id = t.payment_id 
     join promos pr on pr.id = t.promo_id 
-    join status st on st.id = t.status_id where u.id = 1`;
+    join status st on st.id = t.status_id where u.id = $1`;
     db.query(sql, [id], (err, result) => {
       if (err) return reject(err);
       resolve(result);
