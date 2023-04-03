@@ -2,8 +2,8 @@ const historyModel = require("../models/history.model");
 
 const getHistory = async (req, res) => {
   try {
-    const {body} = req;
-    const result = await historyModel.getHistory(body);
+    const {id} = req.authInfo;
+    const result = await historyModel.getHistory(id);
     res.status(200).json({
       data: result.rows,
     });

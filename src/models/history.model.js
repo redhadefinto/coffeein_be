@@ -1,6 +1,6 @@
 const db = require("../configs/postgre");
 
-const getHistory = (data) => {
+const getHistory = (id) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `SELECT h.id, p.product_name, p.price, p.image, s.name, h.quantity
     FROM histories h
@@ -9,7 +9,7 @@ const getHistory = (data) => {
     join status s on h.status_id = s.id
     where u.id = $1`;
     // const values = ["u.id"];
-    db.query(sqlQuery, [data.id], (err, result) => {
+    db.query(sqlQuery, [id], (err, result) => {
       if (err) {
         reject(err);
         return;
