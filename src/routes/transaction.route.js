@@ -7,5 +7,6 @@ const transactionsRouter = Router();
 
 
 // transactions
+transactionsRouter.get('/', checkToken, transactionController.getHistory);
 transactionsRouter.post("/", checkToken, transactionController.createTransaction);
 module.exports = transactionsRouter;

@@ -1,3 +1,6 @@
+// const { db } = require("../configs/environment");
+const db = require('../configs/postgre');
+
 const createTransaction = (client, body, userId) => {
   return new Promise((resolve, reject) => {
     const {payment_id, delivery_id, promo_id, notes, status_id} = body;
@@ -45,4 +48,21 @@ const getTransaction = (client, transactionId) => {
   });
 };
 
-module.exports = { createTransaction, createDetailTransaction, getTransaction };
+const getHistory = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = `select u.email, p.product_name, p.image, s."size", pr.code, py."method" as "payment_method", st."name" as "status", tps.quantity, tps.subtotal from transactions_products_sizes tps
+    join transactions t on t.id = tps.transactions_id 
+    join products p on p.id = tps.product_id
+    join sizes s on s.id = tps.size_id
+    join users u on u.id = t.user_id
+    join payments py on py.id = t.payment_id 
+    join promos pr on pr.id = t.promo_id 
+    join status st on st.id = t.status_id where t.id = $1;`;
+    db.query(sql, [id], (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+}
+
+module.exports = { createTransaction, createDetailTransaction, getTransaction, getHistory };
