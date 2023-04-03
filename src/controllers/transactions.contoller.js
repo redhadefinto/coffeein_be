@@ -80,7 +80,7 @@ const deleteHistory = async (req, res) => {
       body.tpsId
     );
     // console.log(result)
-    res.status(200).json({
+    res.status(201).json({
       data: result.rows,
       msg: 'ok'
     });
