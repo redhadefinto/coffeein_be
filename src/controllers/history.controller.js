@@ -2,7 +2,8 @@ const historyModel = require("../models/history.model");
 
 const getHistory = async (req, res) => {
   try {
-    const result = await historyModel.getHistory();
+    const {body} = req;
+    const result = await historyModel.getHistory(body);
     res.status(200).json({
       data: result.rows,
     });
@@ -77,8 +78,8 @@ const updateHistory = async (req, res) => {
 
 const deleteHistory = async (req, res) => {
   try {
-    const { params } = req;
-    const result = await historyModel.deleteHistory(params);
+    const { body } = req;
+    const result = await historyModel.deleteHistory(body);
     res.status(200).json({
       data: result.rows,
       msg: "Delete Success",

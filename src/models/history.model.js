@@ -1,6 +1,6 @@
 const db = require("../configs/postgre");
 
-const getHistory = (id) => {
+const getHistory = (data) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `SELECT h.id, p.product_name, p.price, p.image, s.name, h.quantity
     FROM histories h
@@ -9,7 +9,7 @@ const getHistory = (id) => {
     join status s on h.status_id = s.id
     where u.id = $1`;
     // const values = ["u.id"];
-    db.query(sqlQuery, [id], (err, result) => {
+    db.query(sqlQuery, [data.id], (err, result) => {
       if (err) {
         reject(err);
         return;
@@ -77,11 +77,11 @@ const updateHistory = (params, data) => {
   });
 };
 
-const deleteHistory = (params) => {
+const deleteHistory = (data) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `delete from history where id = $1`;
-    const values = [params.historyId];
-    db.query(sqlQuery, values, (err, result) => {
+    const sqlQuery = `delete from histories where id = $1`;
+    // const values = [params.historyId];
+    db.query(sqlQuery, [data.id], (err, result) => {
       if (err) {
         reject(err);
         return;
