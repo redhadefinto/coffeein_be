@@ -80,7 +80,7 @@ const deleteHistory = async (req, res) => {
   try {
     // const { body } = req;
     const {params} = req;
-    await historyModel.deleteHistory(params.id);
+    await historyModel.deleteHistory(params);
     res.status(200).json({
       msg: "Delete Success",
     });
