@@ -8,5 +8,4 @@ const transactionsRouter = Router();
 
 // transactions
 transactionsRouter.post("/", checkToken, transactionController.createTransaction);
-
 module.exports = transactionsRouter;

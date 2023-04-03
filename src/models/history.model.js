@@ -1,14 +1,14 @@
 const db = require("../configs/postgre");
 
-const getHistory = () => {
+const getHistory = (id) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `SELECT h.id, p.product_name, u.display_name, p.price
-    FROM history h 
-    JOIN products p ON h.product_id = p.id
-    JOIN users u ON h.user_id = u.id 
-    order by $1;`;
-    const values = ["u.id"];
-    db.query(sqlQuery, values, (err, result) => {
+    const sqlQuery = `SELECT h.id, p.product_name, p.price, p.image, s.name, h.quantity
+    FROM history h
+    join products p ON h.product_id = p.id
+    join users u on h.user_id = u.id
+    where u.id = $1`;
+    // const values = ["u.id"];
+    db.query(sqlQuery, [id], (err, result) => {
       if (err) {
         reject(err);
         return;
@@ -38,13 +38,13 @@ const getHistoryDetail = (params) => {
 
 const insertHistory = (data) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `insert into history (product_id, user_id, quantity, total_price) values ($1, $2, $3, $4) RETURNING *`;
+    const sqlQuery = `insert into history (user_id, product_id, status_id, quantity) values ($1, $2, $3, $4) RETURNING *`;
     // parameterized query
     const values = [
-      data.product_id,
       data.user_id,
+      data.product_id,
+      data.status_id,
       data.quantity,
-      data.total_price,
     ];
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
