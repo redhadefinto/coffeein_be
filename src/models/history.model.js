@@ -6,6 +6,7 @@ const getHistory = (id) => {
     FROM histories h
     join products p ON h.product_id = p.id
     join users u on h.user_id = u.id
+    join status s on h.status_id = s.id
     where u.id = $1`;
     // const values = ["u.id"];
     db.query(sqlQuery, [id], (err, result) => {
