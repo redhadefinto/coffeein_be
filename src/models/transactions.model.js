@@ -65,4 +65,33 @@ const getHistory = (id) => {
   });
 };
 
-module.exports = { createTransaction, createDetailTransaction, getTransaction, getHistory };
+const getDetailHistory = (id, tpsId) => {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT u.email, tps.transactions_id, p.product_name, p.image, p.price, s."size", pr.code, py."method" AS "payment_method", st."name" AS "status", tps.quantity, tps.subtotal 
+      FROM transactions_products_sizes tps
+      JOIN transactions t ON t.id = tps.transactions_id 
+      JOIN products p ON p.id = tps.product_id
+      JOIN sizes s ON s.id = tps.size_id
+      JOIN users u ON u.id = t.user_id
+      JOIN payments py ON py.id = t.payment_id 
+      JOIN promos pr ON pr.id = t.promo_id 
+      JOIN status st ON st.id = t.status_id 
+      WHERE u.id = $1 AND tps.transactions_id = $2;`;
+      db.query(sql, [id, tpsId], (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+};
+
+const deleteHistory = (id, tpsId) => {
+  return new Promise((resolve, reject) => {
+    const sql = `DELETE FROM transactions WHERE user_id = $1 AND id = $2;`;
+    db.query(sql, [id, tpsId], (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+module.exports = { createTransaction, createDetailTransaction, getTransaction, getHistory, getDetailHistory, deleteHistory };

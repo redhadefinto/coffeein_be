@@ -50,7 +50,48 @@ const getHistory = async (req, res) => {
     });
   }
 } ;
+const getDetailHistory = async (req, res) => {
+  try {
+    const { id } = req.authInfo;
+    const {body} = req;
+    // console.log(id)
+    const result = await transactionModel.getDetailHistory(
+      id,
+      body.tpsId
+    );
+    // console.log(result)
+    res.status(200).json({
+      data: result.rows,
+      msg: 'ok'
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal Server Error"
+    });
+  }
+};
+const deleteHistory = async (req, res) => {
+  try {
+    const { id } = req.authInfo;
+    const {body} = req;
+    // console.log(id)
+    const result = await transactionModel.deleteHistory(
+      id,
+      body.tpsId
+    );
+    // console.log(result)
+    res.status(200).json({
+      data: result.rows,
+      msg: 'ok'
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "Internal Server Error"
+    });
+  }
+};
 
 
 
-module.exports = { createTransaction, getHistory };
+
+module.exports = { createTransaction, getHistory, deleteHistory, getDetailHistory };
