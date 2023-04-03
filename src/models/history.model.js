@@ -37,12 +37,12 @@ const getHistoryDetail = (params) => {
   });
 };
 
-const insertHistory = (data) => {
+const insertHistory = (data, id) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `insert into histories (user_id, product_id, status_id, quantity) values ($1, $2, $3, $4) RETURNING *`;
     // parameterized query
     const values = [
-      data.user_id,
+      id,
       data.product_id,
       data.status_id,
       data.quantity,

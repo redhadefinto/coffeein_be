@@ -40,7 +40,8 @@ const getHistoryDetail = async (req, res) => {
 const insertHistory = async (req, res) => {
   try {
     const { body } = req;
-    const result = await historyModel.insertHistory(body);
+    const {id} = req.authInfo;
+    const result = await historyModel.insertHistory(body, id);
     if (result.rows.length === 0) {
       res.status(404).json({
         data: result.rows,
