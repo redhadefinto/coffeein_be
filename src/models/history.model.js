@@ -77,11 +77,11 @@ const updateHistory = (params, data) => {
   });
 };
 
-const deleteHistory = (data) => {
+const deleteHistory = (id) => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `delete from histories where id = $1`;
     // const values = [params.historyId];
-    db.query(sqlQuery, [data.id], (err, result) => {
+    db.query(sqlQuery, [id], (err, result) => {
       if (err) {
         reject(err);
         return;
