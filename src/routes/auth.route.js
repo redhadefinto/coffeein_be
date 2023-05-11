@@ -2,7 +2,6 @@ const { Router } = require("express");
 
 const authController = require('../controllers/auth.controller');
 const authMiddleware = require('../middleware/auth');
-
 const authRouter = Router();
 
 // login => post req
@@ -21,5 +20,7 @@ authRouter.patch('/otp', authController.createOtp);
 authRouter.patch('/forgot', authController.forgot);
 authRouter.patch('/logout', authMiddleware.checkToken, authController.logOut);
 
+authRouter.get('/google', authController.googleLogin);
+authRouter.get('/google/callback', authController.googleCallback);
 
 module.exports = authRouter;

@@ -13,4 +13,7 @@ module.exports = {
   cloudinaryName: process.env.CLOUD_NAME,
   cloudinaryKey: process.env.CLOUD_KEY,
   cloudinarySecret: process.env.CLOUD_SECRET,
+  googleClientId: process.env.Google_Client_Id,
+  googleClientSecret: process.env.Goole_Client_Secret,
+  googleRedirectUri: process.env.Google_Oauth_rectUrl,
 };

@@ -1,4 +1,4 @@
-const profileModel = require('../models/profile.model');
+const profileModel = require("../models/profile.model");
 
 const getProfile = async (req, res) => {
   try {
@@ -14,8 +14,8 @@ const getProfile = async (req, res) => {
       return;
     }
     res.status(200).json({
-        data: result.rows,
-      });
+      data: result.rows,
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({
@@ -28,7 +28,20 @@ const updateProfile = async (req, res) => {
   try {
     const { body } = req;
     const { id } = req.authInfo;
+    let updatePhone;
+    if (body.phone) {
+      updatePhone = await profileModel.updatePhoneNumber(body.phone, id);
+    }
+    console.log(updatePhone);
     const result = await profileModel.updateProfile(id, body);
+    // console.log(updatePhone.rows[0].phone_number);
+    if (updatePhone) {
+      return res.status(200).json({
+        data: result.rows,
+        phone: updatePhone.rows,
+        msg: "Update Success",
+      });
+    }
     res.status(200).json({
       data: result.rows,
       msg: "Update Success",
@@ -43,5 +56,5 @@ const updateProfile = async (req, res) => {
 
 module.exports = {
   getProfile,
-  updateProfile
+  updateProfile,
 };

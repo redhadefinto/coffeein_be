@@ -51,18 +51,57 @@ const insertProfile = (id) => {
 const updateProfile = (id, data) => {
   console.log(data);
   return new Promise((resolve, reject) => {
+    if (data.email) {
+      delete data.email;
+    }
+    if (data.phone) {
+      delete data.phone;
+    }
+    if (data.image) {
+      delete data.image;
+    }
+    // for (const key in data) {
+    //   if (Object.prototype.hasOwnProperty.call(data, key) && data[key] === "") {
+    //     delete data[key];
+    //   }
+    // }
+    // if (Object.keys(data).length === 0) {
+    //   resolve(); // Return early if there are no properties to update
+    //   return;
+    // }
+    if (data.birthday === "") {
+      delete data.birthday;
+    }
+    if (data.gender === "") {
+      delete data.gender;
+    }
     let sqlQuery = "UPDATE profile SET ";
     let values = [];
     let i = 1;
-    for (const [key, val] of Object.entries(data)) {
-      sqlQuery += `"${key}" = $${i}, `;
+    const entries = Object.entries(data);
+    for (const [key, val] of entries) {
+      sqlQuery += `${key} = $${i}, `;
       values.push(val);
       i++;
     }
     sqlQuery = sqlQuery.slice(0, -2);
     sqlQuery += ` WHERE id = $${i} RETURNING *`;
     values.push(id);
+    console.log(sqlQuery);
     db.query(sqlQuery, values, (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result);
+    });
+  });
+};
+
+const updatePhoneNumber = (phone, id) => {
+  return new Promise((resolve, reject) => {
+    let sqlQuery = `update users set phone_number = $1 where id = $2 RETURNING phone_number`;
+    db.query(sqlQuery, [phone, id], (err, result) => {
       if (err) {
         reject(err);
         return;
@@ -98,5 +137,6 @@ module.exports = {
   getProfile,
   insertProfile,
   updateProfile,
-  getProfileImage
+  getProfileImage,
+  updatePhoneNumber,
 };

@@ -75,14 +75,13 @@ const deleteHistory = async (req, res) => {
     const { id } = req.authInfo;
     const {body} = req;
     // console.log(id)
-    const result = await transactionModel.deleteHistory(
+    await transactionModel.deleteHistory(
       id,
       body.tpsId
     );
     // console.log(result)
     res.status(201).json({
-      data: result.rows,
-      msg: 'ok'
+      msg: 'delete Success'
     });
   } catch (error) {
     res.status(500).json({

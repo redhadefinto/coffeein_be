@@ -1,9 +1,14 @@
-const jwt = require('jsonwebtoken');
-const authModels = require('../models/auth.model');
-const bcrypt = require('bcrypt');
-const profileModels = require('../models/profile.model');
-const env = require('../configs/environment');
-
+const jwt = require("jsonwebtoken");
+const authModels = require("../models/auth.model");
+const bcrypt = require("bcrypt");
+const profileModels = require("../models/profile.model");
+const env = require("../configs/environment");
+const { OAuth2Client } = require("google-auth-library");
+const {
+  googleClientId,
+  googleClientSecret,
+  googleRedirectUri,
+} = require("../configs/environment");
 const login = async (req, res) => {
   try {
     // ambil email dan password dari body
@@ -11,10 +16,11 @@ const login = async (req, res) => {
     // verifikasi ke db
     const result = await authModels.userVerification(body);
     // jika valid, maka buatkan jwt token
-    if(result.rows.length < 1) return res.status(401).json({
-      msg: "Email/Password Salah"
-    });
-    const {id, role_id, pass } = result.rows[0];
+    if (result.rows.length < 1)
+      return res.status(401).json({
+        msg: "Email/Password Salah",
+      });
+    const { id, role_id, pass } = result.rows[0];
     // compare password
     const isPasswordValid = await bcrypt.compare(body.password, pass);
     if (!isPasswordValid)
@@ -26,28 +32,28 @@ const login = async (req, res) => {
     const payload = {
       id,
       role_id,
-      image
+      image,
     };
     // console.log(payload)
     const jwtOptions = {
-      expiresIn: "30m"
+      expiresIn: "60m",
     };
     // buat token
     jwt.sign(payload, env.jwtSecret, jwtOptions, async (err, token) => {
-      if(err) throw err;
+      if (err) throw err;
       await authModels.createToken(token, body);
       res.status(200).json({
-        msg: "Selamat Datang",
+        msg: "Login Succes",
         token,
         id,
-        image
+        image,
       });
     });
   } catch (error) {
     // jika tidak, maka error handling
     console.log(error);
     res.status(500).json({
-      msg: "Internal Server Error"
+      msg: "Internal Server Error",
     });
   }
 };
@@ -55,8 +61,8 @@ const login = async (req, res) => {
 const privateAcces = (req, res) => {
   const { id, email, role_id } = req.authInfo;
   res.status(200).json({
-    payload: {id, email, role_id},
-    msg: "OK"
+    payload: { id, email, role_id },
+    msg: "OK",
   });
 };
 
@@ -64,7 +70,7 @@ const roleAcces = (req, res) => {
   const { role_id } = req.authInfo;
   res.status(200).json({
     payload: role_id,
-    msg: "OK"
+    msg: "OK",
   });
 };
 
@@ -80,9 +86,10 @@ const editPassword = async (req, res) => {
     //   msg: "Password Lama Salah"
     // });
     const isPasswordValid = await bcrypt.compare(body.oldPass, passFromDb);
-    if(!isPasswordValid) return res.status(403).json({
-      msg: "Password Lama Salah"
-    });
+    if (!isPasswordValid)
+      return res.status(403).json({
+        msg: "Password Lama Salah",
+      });
     // jika valid, maka edit password
     await authModels.deleteToken(body);
     // enkripsi password baru
@@ -90,18 +97,15 @@ const editPassword = async (req, res) => {
     // masukan new password ke dalam db
     await authModels.editPassword(hashedPassword, authInfo.id);
     // generate new token
-    const newToken = jwt.sign(
-      { id: authInfo.id },
-      env.jwtSecret
-    );
+    const newToken = jwt.sign({ id: authInfo.id }, env.jwtSecret);
     res.status(200).json({
       msg: "Edit Password Success",
-      token: newToken
+      token: newToken,
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      msg: "Internal Server Error"
+      msg: "Internal Server Error",
     });
   }
 };
@@ -112,7 +116,7 @@ const register = async (req, res) => {
     const pass = body.password;
     const hashedPassword = await bcrypt.hash(pass, 10);
     const emailFromDb = await authModels.getEmail(body);
-    if(emailFromDb.rows.length === 1) {
+    if (emailFromDb.rows.length === 1) {
       res.status(400).json({
         msg: "Email already exists",
       });
@@ -153,20 +157,20 @@ const createOtp = async (req, res) => {
     };
     const otp = generateOTP().toString();
     const result = await authModels.createOtp(email, otp);
-    if(result.rows < 1) {
+    if (result.rows < 1) {
       res.status(404).json({
-        msg: 'Email Belum Terdaftar'
+        msg: "Email Belum Terdaftar",
       });
     }
-    // const data = result.rows[0]; 
+    // const data = result.rows[0];
     res.status(200).json({
       otp: result.rows[0].otp,
-      msg: "Create Otp"
+      msg: "Create Otp",
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      msg: "Internal Server Error"
+      msg: "Internal Server Error",
     });
   }
 };
@@ -175,20 +179,20 @@ const forgot = async (req, res) => {
   try {
     const { email, otp, password } = req.body;
     const otpFromDb = await authModels.getOtp(email);
-    if(otpFromDb.rows[0].otp !== otp) {
+    if (otpFromDb.rows[0].otp !== otp) {
       res.status(404).json({
-        msg: "OTP Not valid"
+        msg: "OTP Not valid",
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     await authModels.forgot(email, hashedPassword);
     res.status(200).json({
-      msg: "Change password Success"
+      msg: "Change password Success",
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      msg: "Internal Server Error"
+      msg: "Internal Server Error",
     });
   }
 };
@@ -198,20 +202,58 @@ const logOut = async (req, res) => {
     const { authInfo } = req;
     // const {params} = req;
     // console.log(authInfo.id);
-    const oldToken =  await authModels.getToken(authInfo.id);
+    const oldToken = await authModels.getToken(authInfo.id);
     // console.log(oldToken)
     await authModels.createBlackList(oldToken.rows[0].token, authInfo.id);
     res.status(200).json({
-      msg: "Log Out Berhasil"
+      msg: "Log Out Berhasil",
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      msg: "Internal Server Error"
+      msg: "Internal Server Error",
     });
   }
 };
 
+const client = new OAuth2Client(
+  googleClientId,
+  googleClientSecret,
+  googleRedirectUri
+);
+
+const googleLogin = (req, res) => {
+  const authUrl = client.generateAuthUrl({
+    access_type: "offline",
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+    ],
+  });
+  res.redirect(authUrl);
+};
+
+const googleCallback = async (req, res) => {
+  const code = req.query.code;
+  const { tokens } = await client.getToken(code);
+  const userInfo = await client.verifyIdToken({
+    idToken: tokens.id_token,
+    audience: googleClientId,
+  });
+  console.log(userInfo.payload);
+  const { email, name } = userInfo.payload;
+  console.log(email, name);
+  // const user = await User.findOne({ email });
+  // if (!user) {
+  //   const newUser = new User({
+  //     name,
+  //     email,
+  //   });
+  //   await newUser.save();
+  // }
+  // req.session.userId = user._id;
+  res.redirect("/");
+};
 
 module.exports = {
   login,
@@ -221,5 +263,7 @@ module.exports = {
   register,
   createOtp,
   forgot,
-  logOut
+  logOut,
+  googleLogin,
+  googleCallback,
 };
