@@ -4,7 +4,17 @@ const dataUriParser = require("datauri/parser");
 
 const uploader = async (req, prefix, id) => {
   const { file } = req;
-  if (!file) return {data: null};
+  if (!file) return { data: null };
+
+  // Cek ukuran file
+  const fileSizeLimit = 2 * 1024 * 1024; // 2 MB
+  if (file.size > fileSizeLimit) {
+    return {
+      data: null,
+      msg: "File size exceeded the limit",
+      err: new Error("File size exceeded the limit"),
+    };
+  }
 
   // mendapatkan buffer dari multer
   const buffer = file.buffer;
@@ -18,17 +28,17 @@ const uploader = async (req, prefix, id) => {
     // upload ke cloudinary
     const result = await cloudinary.uploader.upload(datauri.content, {
       public_id: fileName,
-      folder: "coffe_shop"
+      folder: "coffe_shop",
     });
-    return {data: result, msg: "OK"};
+    return { data: result, msg: "OK" };
   } catch (err) {
-    return {data: null, msg: "Upload Failed", err};
+    return { data: null, msg: "Upload Failed", err };
   }
 };
 
 const uploaderUsers = async (req, prefix, id) => {
   const { file } = req;
-  if (!file) return {data: null};
+  if (!file) return { data: null };
 
   // mendapatkan buffer dari multer
   const buffer = file.buffer;
@@ -42,11 +52,11 @@ const uploaderUsers = async (req, prefix, id) => {
     // upload ke cloudinary
     const result = await cloudinary.uploader.upload(datauri.content, {
       public_id: fileName,
-      folder: "coffe_shop_users"
+      folder: "coffe_shop_users",
     });
-    return {data: result, msg: "OK"};
+    return { data: result, msg: "OK" };
   } catch (err) {
-    return {data: null, msg: "Upload Failed", err};
+    return { data: null, msg: "Upload Failed", err };
   }
 };
 

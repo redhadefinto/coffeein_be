@@ -111,27 +111,20 @@ const updatePhoneNumber = (phone, id) => {
   });
 };
 
-// const updateProfileImage = (id, data) => {
-//   return new Promise((resolve, reject) => {
-//     const sqlQuery = `insert into profile (id, first_name, image) values ($1, $2, $3)`;
-//     // parameterized query
-//     db.query(
-//       sqlQuery,
-//       [
-//         parseInt(id),
-//         `guest`,
-//         "https://res.cloudinary.com/ddfixt2hr/image/upload/v1679733467/coffe_shop_users/users-image-1.webp",
-//       ],
-//       (err, result) => {
-//         if (err) {
-//           reject(err);
-//           return;
-//         }
-//         resolve(result);
-//       }
-//     );
-//   });
-// };
+const updateProfileImage = (id, { image }) => {
+  // console.log(image);
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `update profile set image = $1 where id = $2 RETURNING image`;
+    // parameterized query
+    db.query(sqlQuery, [image, id], (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result);
+    });
+  });
+};
 
 module.exports = {
   getProfile,
@@ -139,4 +132,5 @@ module.exports = {
   updateProfile,
   getProfileImage,
   updatePhoneNumber,
+  updateProfileImage,
 };

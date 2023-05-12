@@ -1,16 +1,17 @@
-const {uploader, uploaderUsers} = require('../utils/cloudinary');
+const { uploader, uploaderUsers } = require("../utils/cloudinary");
 const response = require("../utils/response");
-const profileModel = require('../models/profile.model');
+const profileModel = require("../models/profile.model");
 
 const cloudeUpload = async (req, res) => {
   try {
     // upload ke cloud
     const { params } = req;
     const { data, err, msg } = await uploader(req, "product", params.id);
-    if(err) throw {msg, err};
-    if(!data) return res.status(200).json({msg: "No File Uploaded"});
+    if (err) throw { msg, err };
+    if (!data) return res.status(200).json({ msg: "No File Uploaded" });
     res.status(201).json({
-      data, msg
+      data,
+      msg,
     });
   } catch (error) {
     response.error(res, { status: 500, msg: error.err.message });
@@ -24,17 +25,21 @@ const cloudeUploadUsers = async (req, res) => {
     const { id } = req.authInfo;
     // const { params } = req;
     const { data, err, msg } = await uploaderUsers(req, "users", id);
-    if(err) throw {msg, err};
-    if(!data) return res.status(200).json({msg: "No File Uploaded"});
+    if (err) throw { msg, err };
+    if (!data) return res.status(200).json({ msg: "No File Uploaded" });
     const urlImage = data.secure_url;
-    await profileModel.updateProfile(id, {image: urlImage});
+    await profileModel.updateProfileImage(id, { image: urlImage });
     res.status(201).json({
-      data, msg
+      data,
+      msg,
     });
   } catch (error) {
-    response.error(res, { status: 500, msg: error.err.message });
-    // console.log(error)
+    // response.error(res, { status: 500, msg: error.err.message });
+    console.log(error);
+    res.status(500).json({
+      msg: "Internal server error",
+    });
   }
 };
 
-module.exports = {cloudeUpload, cloudeUploadUsers};
+module.exports = { cloudeUpload, cloudeUploadUsers };
