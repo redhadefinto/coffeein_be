@@ -2,7 +2,7 @@ const db = require("../configs/postgre");
 
 const getProfile = (id) => {
   return new Promise((resolve, reject) => {
-    let sqlQuery = `select u.email, u.phone_number, p.first_name, p.last_name, p.display_name, p.address, p.image, p.birthday, p.gender from profile p join users u on p.id = u.id where p.id = $1`;
+    let sqlQuery = `select u.email, u.phone_number, p.first_name, p.last_name, p.display_name, p.address, p.image, TO_CHAR(p.birthday, 'YYYY-MM-DD') AS birthday, p.gender from profile p join users u on p.id = u.id where p.id = $1`;
     db.query(sqlQuery, [id], (err, result) => {
       if (err) {
         reject(err);
@@ -60,18 +60,9 @@ const updateProfile = (id, data) => {
     if (data.image) {
       delete data.image;
     }
-    // for (const key in data) {
-    //   if (Object.prototype.hasOwnProperty.call(data, key) && data[key] === "") {
-    //     delete data[key];
-    //   }
+    // if (data.birthday === "") {
+    //   delete data.birthday;
     // }
-    // if (Object.keys(data).length === 0) {
-    //   resolve(); // Return early if there are no properties to update
-    //   return;
-    // }
-    if (data.birthday === "") {
-      delete data.birthday;
-    }
     if (data.gender === "") {
       delete data.gender;
     }
