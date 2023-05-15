@@ -39,7 +39,7 @@ const uploader = async (req, prefix, id) => {
 const uploaderUsers = async (req, prefix, id) => {
   const { file } = req;
   if (!file) return { data: null };
-
+  console.log(file);
   // mendapatkan buffer dari multer
   const buffer = file.buffer;
   const ext = path.extname(file.originalname).toString();

@@ -2,7 +2,7 @@ const db = require("../configs/postgre");
 
 const getProfile = (id) => {
   return new Promise((resolve, reject) => {
-    let sqlQuery = `select u.email, u.phone_number, p.first_name, p.last_name, p.display_name, p.address, p.image, TO_CHAR(p.birthday, 'YYYY-MM-DD') AS birthday, p.gender from profile p join users u on p.id = u.id where p.id = $1`;
+    let sqlQuery = `select u.email, u.phone_number, u.role_id, p.first_name, p.last_name, p.display_name, p.address, p.image, TO_CHAR(p.birthday, 'YYYY-MM-DD') AS birthday, p.gender from profile p join users u on p.id = u.id where p.id = $1`;
     db.query(sqlQuery, [id], (err, result) => {
       if (err) {
         reject(err);
