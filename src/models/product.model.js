@@ -104,10 +104,25 @@ const getProductDetail = (params) => {
 
 const insertProduct = (data) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `insert into products (product_name, price, category_id, desc) values ($1, $2, $3, $4) RETURNING *`;
-    // parameterized query
+    const sqlQuery = `insert into products (product_name, price, category_id, "desc") values ($1, $2, $3, $4) RETURNING *`;
 
     const values = [data.product_name, data.price, data.category_id, data.desc];
+    db.query(sqlQuery, values, (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result);
+    });
+  });
+};
+
+const updateProductImage = (data, id) => {
+  console.log(id);
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `update products set image = $1 where id = $2 RETURNING *`;
+
+    const values = [data, id];
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
         reject(err);
@@ -170,4 +185,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getMetaProducts,
+  updateProductImage,
 };

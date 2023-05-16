@@ -1,5 +1,4 @@
-const productsModel= require("../models/product.model");
-
+const productsModel = require("../models/product.model");
 
 const getProducts = async (req, res) => {
   try {
@@ -17,7 +16,7 @@ const getProducts = async (req, res) => {
     res.status(200).json({
       data: result.rows,
       meta,
-      msg: "Get Success"
+      msg: "Get Success",
     });
   } catch (err) {
     console.log(err.message);
@@ -55,14 +54,13 @@ const getProductDetail = async (req, res) => {
   }
 };
 
-
 const insertProduct = async (req, res) => {
   try {
-    const { body, file } = req;
-    const result = await productsModel.insertProduct(body, file);
+    const { body } = req;
+    const result = await productsModel.insertProduct(body);
     res.status(201).json({
       data: result.rows,
-      msg: "Create Success"
+      msg: "Create Success",
     });
   } catch (err) {
     console.log(err.message);
@@ -78,7 +76,7 @@ const updateProduct = async (req, res) => {
     const result = await productsModel.updateProduct(body, params, file);
     res.status(200).json({
       data: result.rows,
-      msg: "Update Success"
+      msg: "Update Success",
     });
   } catch (err) {
     console.log(err.message);
@@ -94,7 +92,7 @@ const deleteProduct = async (req, res) => {
     const result = await productsModel.deleteProduct(params);
     res.status(200).json({
       data: result.rows,
-      msg: "Delete Success"
+      msg: "Delete Success",
     });
   } catch (err) {
     console.log(err.message);
@@ -109,5 +107,5 @@ module.exports = {
   insertProduct,
   getProductDetail,
   updateProduct,
-  deleteProduct
+  deleteProduct,
 };
