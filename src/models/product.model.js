@@ -36,21 +36,20 @@ const getProducts = (query) => {
   });
 };
 
-
 const getMetaProducts = (query) => {
   return new Promise((resolve, reject) => {
     let sqlQuery = `select count(*) as total_data from products p`;
-        if (query.name) {
-          sqlQuery += ` WHERE lower(p.product_name) LIKE lower('%${query.name}%')`;
-        }
+    if (query.name) {
+      sqlQuery += ` WHERE lower(p.product_name) LIKE lower('%${query.name}%')`;
+    }
 
-        if (query.categories) {
-          if (query.name) {
-            sqlQuery += ` AND p.category_id = ${query.categories}`;
-          } else {
-            sqlQuery += ` WHERE p.category_id = ${query.categories}`;
-          }
-        }
+    if (query.categories) {
+      if (query.name) {
+        sqlQuery += ` AND p.category_id = ${query.categories}`;
+      } else {
+        sqlQuery += ` WHERE p.category_id = ${query.categories}`;
+      }
+    }
     db.query(sqlQuery, (err, result) => {
       if (err) {
         reject(err);
@@ -64,16 +63,17 @@ const getMetaProducts = (query) => {
       const totalPage = Math.ceil(totalData / limit);
       let next = null;
       let prev = null;
-      if (page > 1) prev = {
-        page: `${page - 1}`,
-        limit: `${limit}`
-      };
-      if (page < totalPage) next = {
-        page: `${page + 1}`,
-        limit: `${limit}`
-      };
-      
-      
+      if (page > 1)
+        prev = {
+          page: `${page - 1}`,
+          limit: `${limit}`,
+        };
+      if (page < totalPage)
+        next = {
+          page: `${page + 1}`,
+          limit: `${limit}`,
+        };
+
       const meta = {
         totalData,
         next,
@@ -102,25 +102,21 @@ const getProductDetail = (params) => {
   });
 };
 
-const insertProduct = (data, file) => {
-  return new Promise((resolve, reject) => { 
-    const sqlQuery = `insert into products (product_name, price, category_id, image) values ($1, $2, $3) RETURNING *`;
+const insertProduct = (data) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `insert into products (product_name, price, category_id, desc) values ($1, $2, $3, $4) RETURNING *`;
     // parameterized query
-    let fileLink = "";
-    if(file) {
-      fileLink = ` /images/${file.filename}`;
-    }
 
-    const values = [data.product_name, data.price, data.category_id, fileLink];
+    const values = [data.product_name, data.price, data.category_id, data.desc];
     db.query(sqlQuery, values, (err, result) => {
-      if(err) {
-        reject (err);
+      if (err) {
+        reject(err);
         return;
       }
       resolve(result);
     });
   });
-};  
+};
 
 const updateProduct = (body, params, file) => {
   // const { body, params } = req;
@@ -134,9 +130,10 @@ const updateProduct = (body, params, file) => {
       i++;
     }
     // console.log(i)
-    if(file) { 
-    const fileLink = `/images/${file.filename}`;
-            sqlQuery += `image = '${fileLink}', `; }
+    if (file) {
+      const fileLink = `/images/${file.filename}`;
+      sqlQuery += `image = '${fileLink}', `;
+    }
     // console.log(req.file.filename);
     sqlQuery = sqlQuery.slice(0, -2);
     // console.log(sqlQuery);
@@ -151,7 +148,6 @@ const updateProduct = (body, params, file) => {
     });
   });
 };
-
 
 const deleteProduct = (params) => {
   return new Promise((resolve, reject) => {
@@ -173,5 +169,5 @@ module.exports = {
   getProductDetail,
   updateProduct,
   deleteProduct,
-  getMetaProducts
+  getMetaProducts,
 };

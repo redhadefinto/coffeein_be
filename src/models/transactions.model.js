@@ -108,6 +108,46 @@ const deleteHistory = (id, tpsId) => {
   });
 };
 
+const getAllTransaction = () => {
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT u.id as user_id, tps.transactions_id, p.id as product_id, s.id as size_id, p.product_name, p.image, p.price, s."size", pr.code, py."method" AS "payment_method", st."name" AS "status", tps.quantity, tps.subtotal 
+      FROM transactions_products_sizes tps
+      JOIN transactions t ON t.id = tps.transactions_id 
+      JOIN products p ON p.id = tps.product_id
+      JOIN sizes s ON s.id = tps.size_id
+      JOIN users u ON u.id = t.user_id
+      JOIN payments py ON py.id = t.payment_id 
+      JOIN promos pr ON pr.id = t.promo_id 
+      JOIN status st ON st.id = t.status_id`;
+    db.query(sql, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+const patchHistory = (body) => {
+  return new Promise((resolve, reject) => {
+    const sql = `UPDATE transactions AS t
+        SET status_id = 3
+        FROM transactions_products_sizes AS tps
+        WHERE tps.transactions_id = $1
+          AND tps.product_id = $2
+          AND tps.size_id = $3
+          AND t.user_id = $4
+        RETURNING t.status_id, tps.transactions_id;
+          `;
+    db.query(
+      sql,
+      [body.transactions_id, body.product_id, body.size_id, body.user_id],
+      (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      }
+    );
+  });
+};
+
 module.exports = {
   createTransaction,
   createDetailTransaction,
@@ -115,4 +155,6 @@ module.exports = {
   getHistory,
   getDetailHistory,
   deleteHistory,
+  getAllTransaction,
+  patchHistory,
 };
