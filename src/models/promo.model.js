@@ -44,10 +44,22 @@ const insertPromo = ({ discount, expired, code }, id) => {
   });
 };
 
-const updatePromo = ({ discount, expired }, params) => {
+const updatePromo = (data, params) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `update promos set discount = $1, expired = $2 where product_id = $3 RETURNING *;`;
-    const values = [discount, expired, params.productId];
+    let sqlQuery = "UPDATE promos SET";
+    const values = [];
+    let index = 1;
+
+    for (const [key, value] of Object.entries(data)) {
+      sqlQuery += ` ${key} = $${index},`;
+      values.push(value);
+      index++;
+    }
+
+    sqlQuery = sqlQuery.slice(0, -1); // Menghapus tanda koma terakhir
+    sqlQuery += " WHERE product_id = $" + index + " RETURNING *";
+    values.push(params.productId);
+
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
         reject(err);

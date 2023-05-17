@@ -205,7 +205,7 @@ const updateProduct = async (req, res) => {
 const updateProductWithPromo = async (req, res) => {
   try {
     const { body, params } = req;
-    await productsModel.updateProductWithPromo(
+    await productsModel.updateProduct(
       {
         product_name: body.product_name,
         price: body.price,

@@ -167,16 +167,28 @@ const updateProductImage = (data, id) => {
 };
 
 const updateProduct = (body, params) => {
-  // const { body, params } = req;
   return new Promise((resolve, reject) => {
-    let sqlQuery = ` update products set product_name = $1, price = $2, category_id = $3, "desc" = $4 where id = $5`;
-    const values = [
-      body.product_name,
-      body.price,
-      body.category_id,
-      body.desc,
-      params.productId,
-    ];
+    let sqlQuery = "UPDATE products SET";
+    let values = [];
+    let index = 1;
+
+    let keys = Object.keys(body);
+    for (let key of keys) {
+      let value = body[key];
+      if (key === "desc") {
+        key = `"${key}"`; // Menambahkan tanda petik pada key "desc"
+      }
+      if (value !== undefined) {
+        sqlQuery += ` ${key} = $${index},`;
+        values.push(value);
+        index++;
+      }
+    }
+
+    sqlQuery = sqlQuery.slice(0, -1); // Menghapus tanda koma terakhir
+    sqlQuery += ` WHERE id = $${index}`;
+    values.push(params.productId);
+
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
         reject(err);
