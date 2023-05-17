@@ -44,16 +44,10 @@ const insertPromo = ({ discount, expired, code }, id) => {
   });
 };
 
-const updatePromo = (params, data) => {
+const updatePromo = ({ discount, expired }, params) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `update promo set product_id = $1, coupon_code = $2, discount = $3, expired = $4 where id = $5 RETURNING *;`;
-    const values = [
-      data.product_id,
-      data.coupon_code,
-      data.discount,
-      data.expired,
-      params.promoId,
-    ];
+    const sqlQuery = `update promos set discount = $1, expired = $2 where product_id = $3 RETURNING *;`;
+    const values = [discount, expired, params.productId];
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
         reject(err);

@@ -87,9 +87,27 @@ const getMetaProducts = (query) => {
 
 const getProductDetail = (params) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `select p.id, p."product_name", p.image, p.price, pc."category_name"
+    const sqlQuery = `select p.id, p."product_name", p.image, p.price, pc.id as categories_id, p.desc
     from products p 
     join categories pc on p.category_id = pc.id 
+    WHERE p.id = $1`;
+    const values = [params.productId];
+    db.query(sqlQuery, values, (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result);
+    });
+  });
+};
+
+const getProductDetailWithPromo = (params) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `select p.id, p."product_name", p.image, p.price, p.desc, pc.id as categories_id, pr.discount, pr.expired 
+    from products p 
+    join categories pc on p.category_id = pc.id 
+    join promos pr on pr.product_id = p.id
     WHERE p.id = $1`;
     const values = [params.productId];
     db.query(sqlQuery, values, (err, result) => {
@@ -119,13 +137,6 @@ const insertProduct = (data) => {
 
 const insertProductPromo = ({ product_name, price, category_id, desc }) => {
   return new Promise((resolve, reject) => {
-    // if (data.discount) {
-    //   delete data.discount;
-    // }
-    // if (data.expired) {
-    //   delete data.expired;
-    // }
-    // console.log(data);
     const sqlQuery = `insert into products (product_name, price, category_id, "desc") values ($1, $2, $3, $4) RETURNING *`;
 
     const values = [product_name, price, category_id, desc];
@@ -155,27 +166,35 @@ const updateProductImage = (data, id) => {
   });
 };
 
-const updateProduct = (body, params, file) => {
+const updateProduct = (body, params) => {
   // const { body, params } = req;
   return new Promise((resolve, reject) => {
-    let sqlQuery = "UPDATE products SET ";
-    let values = [];
-    let i = 1;
-    for (const [key, val] of Object.entries(body)) {
-      sqlQuery += `"${key}" = $${i}, `;
-      values.push(val);
-      i++;
-    }
-    // console.log(i)
-    if (file) {
-      const fileLink = `/images/${file.filename}`;
-      sqlQuery += `image = '${fileLink}', `;
-    }
-    // console.log(req.file.filename);
-    sqlQuery = sqlQuery.slice(0, -2);
-    // console.log(sqlQuery);
-    sqlQuery += ` WHERE id = $${i} RETURNING *`;
-    values.push(params.productId);
+    let sqlQuery = ` update products set product_name = $1, price = $2, category_id = $3, "desc" = $4 where id = $5`;
+    const values = [
+      body.product_name,
+      body.price,
+      body.category_id,
+      body.desc,
+      params.productId,
+    ];
+    db.query(sqlQuery, values, (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result);
+    });
+  });
+};
+
+const updateProductWithPromo = (
+  { product_name, price, category_id, desc },
+  params
+) => {
+  return new Promise((resolve, reject) => {
+    const sqlQuery = `update products set product_name = $1, price = $2, category_id = $3, "desc" = $4 where id = $5`;
+
+    const values = [product_name, price, category_id, desc, params.productId];
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
         reject(err);
@@ -247,4 +266,6 @@ module.exports = {
   updateProductImage,
   insertProductPromo,
   getProductDiscount,
+  getProductDetailWithPromo,
+  updateProductWithPromo,
 };
