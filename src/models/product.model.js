@@ -59,7 +59,7 @@ const getMetaProducts = (query) => {
       // console.log(total.length)
       // const totalData = total.length;
       const page = parseInt(query.page) || 1;
-      const limit = parseInt(query.limit) || 8;
+      const limit = parseInt(query.limit);
       const totalPage = Math.ceil(totalData / limit);
       let next = null;
       let prev = null;
@@ -117,8 +117,30 @@ const insertProduct = (data) => {
   });
 };
 
+const insertProductPromo = ({ product_name, price, category_id, desc }) => {
+  return new Promise((resolve, reject) => {
+    // if (data.discount) {
+    //   delete data.discount;
+    // }
+    // if (data.expired) {
+    //   delete data.expired;
+    // }
+    // console.log(data);
+    const sqlQuery = `insert into products (product_name, price, category_id, "desc") values ($1, $2, $3, $4) RETURNING *`;
+
+    const values = [product_name, price, category_id, desc];
+    db.query(sqlQuery, values, (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result);
+    });
+  });
+};
+
 const updateProductImage = (data, id) => {
-  console.log(id);
+  // console.log(id);
   return new Promise((resolve, reject) => {
     const sqlQuery = `update products set image = $1 where id = $2 RETURNING *`;
 
@@ -178,6 +200,43 @@ const deleteProduct = (params) => {
   });
 };
 
+const getProductDiscount = (query) => {
+  return new Promise((resolve, reject) => {
+    let sqlQuery = `SELECT p.id, p.product_name, p.price, p.image, c.category_name, pr.discount
+                    FROM products p 
+                    JOIN categories c ON p.category_id = c.id
+                    JOIN promos pr ON pr.product_id = p.id`;
+
+    if (query.name) {
+      sqlQuery += ` WHERE lower(p.product_name) LIKE lower('%${query.name}%')`;
+    }
+
+    if (query.categories) {
+      sqlQuery += ` AND p.category_id = ${query.categories}`;
+    }
+
+    let order = "p.id ASC";
+    if (query.order === "cheapest") order = "p.price ASC";
+    if (query.order === "priciest") order = "p.price DESC";
+    sqlQuery += ` ORDER BY ${order}`;
+
+    if (query.limit) {
+      const limit = parseInt(query.limit) || 5;
+      const page = parseInt(query.page) || 1;
+      const offset = parseInt(page - 1) * limit;
+      sqlQuery += ` LIMIT ${limit} OFFSET ${offset}`;
+    }
+
+    db.query(sqlQuery, (err, result) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result);
+    });
+  });
+};
+
 module.exports = {
   getProducts,
   insertProduct,
@@ -186,4 +245,6 @@ module.exports = {
   deleteProduct,
   getMetaProducts,
   updateProductImage,
+  insertProductPromo,
+  getProductDiscount,
 };

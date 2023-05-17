@@ -3,7 +3,7 @@ const db = require("../configs/postgre");
 const getPromo = () => {
   return new Promise((resolve, reject) => {
     const sqlQuery = `select pm.id, pr.product_name, pm.coupon_code, pm.discount, pm.expired from promo pm join products pr on pm.product_id = pr.id order by $1;`;
-    const values = ['pm.id'];
+    const values = ["pm.id"];
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
         reject(err);
@@ -28,16 +28,12 @@ const getPromoDetail = (params) => {
   });
 };
 
-const insertPromo = (data) => {
+const insertPromo = ({ discount, expired, code }, id) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `insert into promo (product_id, coupon_code, discount, expired) values ($1, $2, $3 $4) RETURNING *`;
+    const sqlQuery = `insert into promos (code, discount, product_id, expired) values ($1, $2, $3, $4) RETURNING *`;
     // parameterized query
-    const values = [
-      data.product_id,
-      data.coupon_code,
-      data.discount,
-      data.expired
-    ];
+    console.log(code, discount, expired);
+    const values = [code, discount, id, expired];
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
         reject(err);
@@ -56,7 +52,7 @@ const updatePromo = (params, data) => {
       data.coupon_code,
       data.discount,
       data.expired,
-      params.promoId
+      params.promoId,
     ];
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
@@ -87,5 +83,5 @@ module.exports = {
   getPromoDetail,
   insertPromo,
   updatePromo,
-  deletePromo
+  deletePromo,
 };

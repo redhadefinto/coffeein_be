@@ -1,5 +1,6 @@
 const productsModel = require("../models/product.model");
-
+const promoModel = require("../models/promo.model");
+const { uploader, uploaderUsers } = require("../utils/cloudinary");
 const getProducts = async (req, res) => {
   try {
     const { query } = req;
@@ -11,10 +12,37 @@ const getProducts = async (req, res) => {
       });
       return;
     }
+    const productsDiscount = await productsModel.getProductDiscount(query);
+
+    const mergedArray = [];
+
+    // Membuat objek set berisi ID yang telah diproses
+    const processedIds = new Set();
+
+    // Memproses objek dari array1
+    result.rows.forEach((obj) => {
+      if (!processedIds.has(obj.id)) {
+        mergedArray.push(obj);
+        processedIds.add(obj.id);
+      }
+    });
+
+    // Memproses objek dari array2 dengan preferensi pada objek yang memiliki diskon
+    productsDiscount.rows.forEach((obj) => {
+      if (!processedIds.has(obj.id)) {
+        mergedArray.push(obj);
+        processedIds.add(obj.id);
+      } else if (obj.discount) {
+        const index = mergedArray.findIndex((item) => item.id === obj.id);
+        mergedArray[index] = obj;
+      }
+    });
+
+    // console.log(mergedArray);
     // console.log(result.rows)
     const meta = await productsModel.getMetaProducts(query, result.rows);
     res.status(200).json({
-      data: result.rows,
+      data: mergedArray,
       meta,
       msg: "Get Success",
     });
@@ -57,9 +85,66 @@ const getProductDetail = async (req, res) => {
 const insertProduct = async (req, res) => {
   try {
     const { body } = req;
+    // console.log(file);
+    console.log(body);
     const result = await productsModel.insertProduct(body);
+    const id = result.rows[0].id;
+    const { data, err, msg } = await uploader(req, "product", id);
+    if (err) throw { msg, err };
+    if (!data) return res.status(200).json({ msg: "No File Uploaded" });
+    const urlImage = data.secure_url;
+    const datas = await productsModel.updateProductImage(urlImage, id);
     res.status(201).json({
-      data: result.rows,
+      data: datas.rows,
+      msg: "Create Success",
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({
+      msg: "Internal Server Error",
+    });
+  }
+};
+
+const insertProductPromo = async (req, res) => {
+  try {
+    const { body } = req;
+    const result = await productsModel.insertProductPromo({
+      product_name: body.product_name,
+      price: body.price,
+      category_id: body.category_id,
+      desc: body.desc,
+    });
+    const id = result.rows[0].id;
+    const { data, err, msg } = await uploader(req, "product", id);
+    if (err) throw { msg, err };
+    if (!data) return res.status(200).json({ msg: "No File Uploaded" });
+    const urlImage = data.secure_url;
+    const datas = await productsModel.updateProductImage(urlImage, id);
+    const generatePromoCode = (length) => {
+      let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let promoCode = "";
+
+      for (let i = 0; i < length; i++) {
+        promoCode += characters.charAt(
+          Math.floor(Math.random() * characters.length)
+        );
+      }
+
+      return promoCode;
+    };
+
+    // Contoh penggunaan dengan panjang 6 karakter
+    const promoCode = generatePromoCode(6);
+    // console.log(promoCode);
+
+    const promo = await promoModel.insertPromo(
+      { discount: body.discount, expired: body.expired, code: promoCode },
+      id
+    );
+    res.status(201).json({
+      data: datas.rows,
+      promo: promo.rows,
       msg: "Create Success",
     });
   } catch (err) {
@@ -108,4 +193,5 @@ module.exports = {
   getProductDetail,
   updateProduct,
   deleteProduct,
+  insertProductPromo,
 };
