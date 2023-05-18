@@ -163,8 +163,9 @@ const createOtp = async (req, res) => {
       });
     }
     // const data = result.rows[0];
+    console.log(result.rows[0].otp);
     res.status(200).json({
-      otp: result.rows[0].otp,
+      // otp: result.rows[0].otp,
       msg: "Create Otp",
     });
   } catch (error) {
