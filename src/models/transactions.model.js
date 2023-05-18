@@ -81,7 +81,7 @@ const getHistory = (id) => {
 
 const getDetailHistory = (id, tpsId) => {
   return new Promise((resolve, reject) => {
-    const sql = `SELECT u.email, tps.transactions_id, p.product_name, p.image, p.price, s."size", pr.code, py."method" AS "payment_method", st."name" AS "status", tps.quantity, tps.subtotal, t.created_at 
+    const sql = `SELECT u.email, tps.transactions_id, p.product_name, p.image, p.price, s."size", pr.code, py."method" AS "payment_method", st."name" AS "status", tps.quantity, tps.subtotal, tps.created_at 
       FROM transactions_products_sizes tps
       JOIN transactions t ON t.id = tps.transactions_id 
       JOIN products p ON p.id = tps.product_id
