@@ -64,7 +64,7 @@ const getTransaction = (client, transactionId) => {
 
 const getHistory = (id) => {
   return new Promise((resolve, reject) => {
-    const sql = `select u.email, tps.transactions_id, p.product_name, p.image, s."size", pr.code, py."method" as "payment_method", st."name" as "status", tps.quantity, tps.subtotal, t.created_at from transactions_products_sizes tps
+    const sql = `select u.email, tps.transactions_id, p.product_name, p.image, s."size", pr.code, py."method" as "payment_method", st."name" as "status", tps.quantity, tps.subtotal, TO_CHAR(t.created_at, 'YYYY-MM-DD') AS created_at  from transactions_products_sizes tps
     join transactions t on t.id = tps.transactions_id 
     join products p on p.id = tps.product_id
     join sizes s on s.id = tps.size_id
