@@ -25,11 +25,17 @@ const memoryUpload = multer({
 
 const errorHandler = (err, res, next) => {
   if (err instanceof multer.MulterError) {
-    return res.status(400).json({ status: "Upload Error", msg: err.message });
+    return res.status(401).json({ status: "Upload Error", msg: err.message });
   }
   if (err) {
     if (err.code === "LIMIT_UNEXPECTED_FILE") {
       return res.status(400).json("Too many files to upload. 5pict only");
+    }
+    if (err.message === "Only Use Allowed Extension (JPG, PNG, JPEG, WEBP)") {
+      return res.status(401).json({
+        status: 401,
+        msg: err.message,
+      });
     }
     return res
       .status(500)
