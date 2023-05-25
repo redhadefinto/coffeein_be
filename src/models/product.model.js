@@ -204,9 +204,46 @@ const updateProductWithPromo = (
   params
 ) => {
   return new Promise((resolve, reject) => {
-    const sqlQuery = `update products set product_name = $1, price = $2, category_id = $3, "desc" = $4 where id = $5`;
+    let updateFields = []; // Menyimpan kolom yang akan diupdate
+    let values = []; // Menyimpan nilai yang akan diupdate
 
-    const values = [product_name, price, category_id, desc, params.productId];
+    if (product_name) {
+      updateFields.push("product_name");
+      values.push(product_name);
+    }
+
+    if (price) {
+      updateFields.push("price");
+      values.push(price);
+    }
+
+    if (category_id) {
+      updateFields.push("category_id");
+      values.push(category_id);
+    }
+
+    if (desc) {
+      updateFields.push("desc");
+      values.push(desc);
+    }
+
+    if (updateFields.length === 0) {
+      // Tidak ada atribut yang diupdate
+      resolve("No attributes to update");
+      return;
+    }
+
+    // Membuat dynamic SQL query
+    const updateFieldsString = updateFields
+      .map((field, index) => `${field} = $${index + 1}`)
+      .join(", ");
+    const sqlQuery = `UPDATE products SET ${updateFieldsString} WHERE id = $${
+      updateFields.length + 1
+    }`;
+
+    // Menambahkan ID produk ke dalam values
+    values.push(params.productId);
+
     db.query(sqlQuery, values, (err, result) => {
       if (err) {
         reject(err);
