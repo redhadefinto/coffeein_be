@@ -179,7 +179,7 @@ const insertProductPromo = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
-    const { body, params } = req;
+    const { body, params, file } = req;
     await productsModel.updateProduct(body, params);
     // const id = result.rows[0].id;
     const { data, err, msg } = await uploader(req, "product", params.productId);
@@ -204,7 +204,7 @@ const updateProduct = async (req, res) => {
 
 const updateProductWithPromo = async (req, res) => {
   try {
-    const { body, params } = req;
+    const { body, params, file } = req;
     await productsModel.updateProduct(
       {
         product_name: body.product_name,
@@ -215,14 +215,21 @@ const updateProductWithPromo = async (req, res) => {
       params
     );
     // const id = result.rows[0].id;
-    const { data, err, msg } = await uploader(req, "product", params.productId);
-    if (err) throw { msg, err };
-    if (!data) return res.status(200).json({ msg: "No File Uploaded" });
-    const urlImage = data.secure_url;
-    const datas = await productsModel.updateProductImage(
-      urlImage,
-      params.productId
-    );
+    let datas;
+    if (file) {
+      const { data, err, msg } = await uploader(
+        req,
+        "product",
+        params.productId
+      );
+      if (err) throw { msg, err };
+      if (!data) return res.status(200).json({ msg: "No File Uploaded" });
+      const urlImage = data.secure_url;
+      datas = await productsModel.updateProductImage(
+        urlImage,
+        params.productId
+      );
+    }
     const promo = await promoModel.updatePromo(
       { discount: body.discount, expired: body.expired },
       params
