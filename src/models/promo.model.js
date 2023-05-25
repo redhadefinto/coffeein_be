@@ -64,7 +64,7 @@ const updatePromo = (data, params) => {
     }
 
     sqlQuery = sqlQuery.slice(0, -1); // Removing the trailing comma
-    sqlQuery += ` WHERE id = $${index}`;
+    sqlQuery += ` WHERE product_id = $${index}`;
     values.push(params.productId);
 
     db.query(sqlQuery, values, (err, result) => {
