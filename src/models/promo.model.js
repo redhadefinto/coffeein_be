@@ -53,9 +53,6 @@ const updatePromo = (data, params) => {
     let keys = Object.keys(data);
     for (let key of keys) {
       let value = data[key];
-      if (key === "desc") {
-        key = `"${key}"`; // Adding quotes to the "desc" key
-      }
       if (value !== undefined) {
         sqlQuery += ` ${key} = $${index},`;
         values.push(value);
