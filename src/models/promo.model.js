@@ -47,17 +47,24 @@ const insertPromo = ({ discount, expired, code }, id) => {
 const updatePromo = (data, params) => {
   return new Promise((resolve, reject) => {
     let sqlQuery = "UPDATE promos SET";
-    const values = [];
+    let values = [];
     let index = 1;
 
-    for (const [key, value] of Object.entries(data)) {
-      sqlQuery += ` ${key} = $${index},`;
-      values.push(value);
-      index++;
+    let keys = Object.keys(data);
+    for (let key of keys) {
+      let value = data[key];
+      if (key === "desc") {
+        key = `"${key}"`; // Adding quotes to the "desc" key
+      }
+      if (value !== undefined) {
+        sqlQuery += ` ${key} = $${index},`;
+        values.push(value);
+        index++;
+      }
     }
 
-    sqlQuery = sqlQuery.slice(0, -1); // Menghapus tanda koma terakhir
-    sqlQuery += " WHERE product_id = $" + index + " RETURNING *";
+    sqlQuery = sqlQuery.slice(0, -1); // Removing the trailing comma
+    sqlQuery += ` WHERE id = $${index}`;
     values.push(params.productId);
 
     db.query(sqlQuery, values, (err, result) => {
