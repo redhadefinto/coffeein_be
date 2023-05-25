@@ -45,8 +45,9 @@ const insertPromo = ({ discount, expired, code }, id) => {
 };
 
 const updatePromo = (data, params) => {
+  console.log(params.productId);
   return new Promise((resolve, reject) => {
-    let sqlQuery = "UPDATE promos SET";
+    let sqlQuery = "UPDATE promos SET ";
     let values = [];
     let index = 1;
 
@@ -54,13 +55,13 @@ const updatePromo = (data, params) => {
     for (let key of keys) {
       let value = data[key];
       if (value !== undefined) {
-        sqlQuery += ` ${key} = $${index},`;
+        sqlQuery += `${key} = $${index}, `;
         values.push(value);
         index++;
       }
     }
 
-    sqlQuery = sqlQuery.slice(0, -1); // Removing the trailing comma
+    sqlQuery = sqlQuery.slice(0, -2); // Menghapus spasi dan koma terakhir
     sqlQuery += ` WHERE product_id = $${index}`;
     values.push(params.productId);
 

@@ -205,16 +205,19 @@ const updateProduct = async (req, res) => {
 const updateProductWithPromo = async (req, res) => {
   try {
     const { body, params, file } = req;
-    await productsModel.updateProduct(
-      {
-        product_name: body.product_name,
-        price: body.price,
-        category_id: body.category_id,
-        desc: body.desc,
-      },
-      params
-    );
+    if (body.product_name || body.price || body.category_id || body.desc) {
+      await productsModel.updateProduct(
+        {
+          product_name: body.product_name,
+          price: body.price,
+          category_id: body.category_id,
+          desc: body.desc,
+        },
+        params
+      );
+    }
     // const id = result.rows[0].id;
+    // console.log("lewat");
     let datas;
     if (file) {
       const { data, err, msg } = await uploader(
@@ -235,7 +238,7 @@ const updateProductWithPromo = async (req, res) => {
       params
     );
     res.status(200).json({
-      data: datas.rows,
+      data: datas,
       promo: promo.rows,
       msg: "Update Success",
     });
