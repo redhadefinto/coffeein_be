@@ -35,7 +35,7 @@ const insertProfile = (id) => {
       [
         parseInt(id),
         `guest`,
-        "https://res.cloudinary.com/ddfixt2hr/image/upload/v1679733467/coffe_shop_users/users-image-1.webp",
+        "https://res.cloudinary.com/ddfixt2hr/image/upload/v1679733467/coffe_shop_users/users-image-4.jpg",
       ],
       (err, result) => {
         if (err) {
