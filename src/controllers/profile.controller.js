@@ -28,29 +28,18 @@ const updateProfile = async (req, res) => {
   try {
     const { body } = req;
     const { id } = req.authInfo;
-    let updatePhone;
-    if (body.phone) {
-      updatePhone = await profileModel.updatePhoneNumber(body.phone, id);
+    if (body.phone_number) {
+      await profileModel.updatePhoneNumber(body.phone_number, id);
+      if (Object.keys(body).length === 1) {
+        res.status(200).json({
+          msg: "Update Success",
+        });
+        return;
+      }
     }
-    // console.log(updatePhone);
-    let result;
-    if (
-      body.first_name ||
-      body.last_name ||
-      body.birthday ||
-      body.address ||
-      body.gender ||
-      body.display_name
-    ) {
-      result = await profileModel.updateProfile(id, body);
-    }
-    if (!result && !updatePhone) {
-      return res.status(404).json({
-        msg: "No Update",
-      });
-    }
+    const result = await profileModel.updateProfile(id, body);
     res.status(200).json({
-      phone: updatePhone.rows,
+      // phone: updatePhone.rows,
       data: result.rows,
       msg: "Update Success",
     });

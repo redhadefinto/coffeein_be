@@ -54,14 +54,14 @@ const updateProfile = (id, data) => {
     if (data.email) {
       delete data.email;
     }
-    if (data.phone) {
-      delete data.phone;
-    }
     if (data.image) {
       delete data.image;
     }
     if (data.gender === "") {
       delete data.gender;
+    }
+    if (data.phone_number) {
+      delete data.phone_number;
     }
     let sqlQuery = "UPDATE profile SET ";
     let values = [];
