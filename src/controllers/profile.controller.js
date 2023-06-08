@@ -32,17 +32,25 @@ const updateProfile = async (req, res) => {
     if (body.phone) {
       updatePhone = await profileModel.updatePhoneNumber(body.phone, id);
     }
-    console.log(updatePhone);
-    const result = await profileModel.updateProfile(id, body);
-    // console.log(updatePhone.rows[0].phone_number);
-    if (updatePhone) {
-      return res.status(200).json({
-        data: result.rows,
-        phone: updatePhone.rows,
-        msg: "Update Success",
+    // console.log(updatePhone);
+    let result;
+    if (
+      body.first_name ||
+      body.last_name ||
+      body.birthday ||
+      body.address ||
+      body.gender ||
+      body.display_name
+    ) {
+      result = await profileModel.updateProfile(id, body);
+    }
+    if (!result && !updatePhone) {
+      return res.status(404).json({
+        msg: "No Update",
       });
     }
     res.status(200).json({
+      phone: updatePhone.rows,
       data: result.rows,
       msg: "Update Success",
     });

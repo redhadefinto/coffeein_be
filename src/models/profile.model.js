@@ -60,9 +60,6 @@ const updateProfile = (id, data) => {
     if (data.image) {
       delete data.image;
     }
-    // if (data.birthday === "") {
-    //   delete data.birthday;
-    // }
     if (data.gender === "") {
       delete data.gender;
     }
