@@ -44,7 +44,7 @@ const updateProfile = async (req, res) => {
     ) {
       result = await profileModel.updateProfile(id, body);
     }
-    if (!result || !updatePhone) {
+    if (!result && !updatePhone) {
       return res.status(404).json({
         msg: "No Update",
       });
