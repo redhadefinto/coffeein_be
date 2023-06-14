@@ -9,23 +9,9 @@
 
 # **Introduction**
 
-Coffeein is a website for ordering coffee.
+The backend application for a coffee shop is a system specifically designed to manage the operations and business activities behind the scenes of a coffee shop. This application serves as the backbone of the entire business system, facilitating various important functions needed to run a coffee shop efficiently and successfully.
 
 ---
-
-## 𓆙 Table of Contents
-
-- [Introduction](#Introduction)
-- [Table of Contents](#𓆙-Table-of-Contents)
-- [Requirement](#𓆙-Requirement)
-- [Installation](#)
-  - [Windows](#𓆙-Windows-Installation)
-  - [Linux](#𓆙_Linux_Installation)
-- [How to run](#𓆙-How-to-run)
-- [Route](#𓆙-Documentation-Postman)
-- [Documentation Postman](#𓆙-Documentation-Postman)
-- [Related Project](#𓆙-Related-Project)
-- [Contributor](#𓆙-Contributors)
 
 ## 𓆙 Requirement
 
@@ -118,6 +104,12 @@ $ npm run dev
 | /promo/:id           |   `DELETE`   | Promo        | Delete Promo                         |
 | /profile             |    `GET`     | Profile      | Get Profile                          |
 | /profile             |   `PATCH`    | Profile      | Edit Profile                         |
+
+## Deployment
+
+Project Link: [https://coffe-shop-gamma.vercel.app/](https://coffe-shop-gamma.vercel.app/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## 𓆙 Documentation Postman
 
