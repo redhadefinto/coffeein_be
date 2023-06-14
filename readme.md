@@ -121,8 +121,8 @@ Download json [POSTMAN](https://api.postman.com/collections/22450553-e364f8b6-38
 
 ## 𓆙 Related-Project
 
-- [FRONT-END](https://coffe-shop-fullstack.vercel.app/)
-- [BACK-END](https://coffe-shop-gamma.vercel.app/)
+- [FRONT-END](https://github.com/redhadefinto/coffeein_fe)
+- [MOBILE](https://github.com/redhadefinto/coffeein-mobile)
 
 ## 𓆙 Contributor
 
