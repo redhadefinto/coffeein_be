@@ -1,37 +1,23 @@
-# <img width="50" src="./public/logo.png" alt="display-documentation"> **COFFEEIN**
+<div align="center">
+  # <img width="50" src="./public/logo.png" alt="display-documentation"> **COFFEEIN**
+  [![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
+  [![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)](https://expressjs.com/)
+  [![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+</div>
 
-[![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
-[![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)](https://expressjs.com/)
-[![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 <br>
 
 ---
 
 # **Introduction**
 
-Coffeein is a website for ordering coffee.
+The backend application for a coffee shop is a system specifically designed to manage the operations and business activities behind the scenes of a coffee shop. This application serves as the backbone of the entire business system, facilitating various important functions needed to run a coffee shop efficiently and successfully.
 
 ---
-
-## 𓆙 Table of Contents
-
-- [Introduction](#Introduction)
-- [Table of Contents](#𓆙-Table-of-Contents)
-- [Requirement](#𓆙-Requirement)
-- [Installation](#)
-  - [Windows](#𓆙-Windows-Installation)
-  - [Linux](#𓆙_Linux_Installation)
-- [How to run](#𓆙-How-to-run)
-- [Route](#𓆙-Documentation-Postman)
-- [Documentation Postman](#𓆙-Documentation-Postman)
-- [Related Project](#𓆙-Related-Project)
-- [Contributor](#𓆙-Contributors)
 
 ## 𓆙 Requirement
 
 This repo require a [NodeJS](https://nodejs.org/)
-
-[ENV](#ENV) File
 
 ## 𓆙 Windows Installation
 
@@ -63,24 +49,23 @@ $ npm i
 2. Add .env file at root folder, and add following
 
 ```sh
-DB_HOST = ""
-DB_NAME = ""
-DB_PORT = ""
-DB_USER = ""
-DB_PWD = ""
-SERVER_PORT = ""
+DB_HOST = "YOUR HOST"
+DB_NAME = "YOUR DB NAME"
+DB_PORT = "YOUR DB PORT"
+DB_USER = "YOUR DB USER"
+DB_PWD = "YOUR DB PASSWORD"
+SERVER_PORT = "YOUR LOCALHOST"
 
-JWT_SECRET = ""
+JWT_SECRET = "YOUR SECRET JWT"
 
-MONGO_PWD = ""
+MONGO_PWD = "YOUR MONGO PASSWORD"
+MONGO_DBNAME = "YOUR DB NAME"
+MONGO_HOST = "YOUR MONGO HOST"
+MONGO_USER = "YOUR USERNAME MONGO"
 
-MONGO_DBNAME = ""
-MONGO_HOST = ""
-MONGO_USER = ""
-
-CLOUD_NAME =  ""
-CLOUD_KEY = ""
-CLOUD_SECRET = ""
+CLOUD_NAME = "YOUR CLOUDNAME"
+CLOUD_KEY = "YOUR KEY CLOUD"
+CLOUD_SECRET = "YOUR KEY SECRET CLOUD "
 ```
 
 3. Starting application
@@ -119,6 +104,12 @@ $ npm run dev
 | /profile             |    `GET`     | Profile      | Get Profile                          |
 | /profile             |   `PATCH`    | Profile      | Edit Profile                         |
 
+## Deployment
+
+Project Link: [klick](https://coffe-shop-gamma.vercel.app/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## 𓆙 Documentation Postman
 
 Click here [POSTMAN](https://documenter.postman.com/preview/22450553-e364f8b6-386f-4613-aa1e-dc3c1947392f?environment=&versionTag=latest&apiName=CURRENT&version=latest&documentationLayout=classic-double-column&documentationTheme=light&logo=https%3A%2F%2Fres.cloudinary.com%2Fpostman%2Fimage%2Fupload%2Ft_team_logo%2Fv1%2Fteam%2Fanonymous_team&logoDark=https%3A%2F%2Fres.cloudinary.com%2Fpostman%2Fimage%2Fupload%2Ft_team_logo%2Fv1%2Fteam%2Fanonymous_team&right-sidebar=303030&top-bar=FFFFFF&highlight=FF6C37&right-sidebar-dark=303030&top-bar-dark=212121&highlight-dark=FF6C37)
@@ -130,8 +121,8 @@ Download json [POSTMAN](https://api.postman.com/collections/22450553-e364f8b6-38
 
 ## 𓆙 Related-Project
 
-- [FRONT-END](https://coffe-shop-fullstack.vercel.app/)
-- [BACK-END](https://coffe-shop-gamma.vercel.app/)
+- [FRONT-END](https://github.com/redhadefinto/coffeein_fe)
+- [MOBILE](https://github.com/redhadefinto/coffeein-mobile)
 
 ## 𓆙 Contributor
 
