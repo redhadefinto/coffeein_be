@@ -1,8 +1,20 @@
 <div align="center">
-  # <img width="50" src="./public/logo.png" alt="display-documentation"> **COFFEEIN**
-  [![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
-  [![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)](https://expressjs.com/)
-  [![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+  <div style="display: flex; justify-content: center; align-items: center">
+    <img width="50" src="./public/logo.png" alt="display-documentation">  
+  
+  <h2 style="margin-top: 30px; margin-left: 10px"> 
+  
+  **Coffeein**
+  
+  </h2>
+  </div>
+  
+  <br>
+
+[![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
+[![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)](https://expressjs.com/)
+[![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+
 </div>
 
 <br>
@@ -106,11 +118,14 @@ $ npm run dev
 
 ## Deployment
 
-Project Link: [klick](https://coffe-shop-gamma.vercel.app/)
+<br>
+Project Link: [KLICK](https://coffe-shop-gamma.vercel.app)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## 𓆙 Documentation Postman
+
+<br>
 
 Click here [POSTMAN](https://documenter.postman.com/preview/22450553-e364f8b6-386f-4613-aa1e-dc3c1947392f?environment=&versionTag=latest&apiName=CURRENT&version=latest&documentationLayout=classic-double-column&documentationTheme=light&logo=https%3A%2F%2Fres.cloudinary.com%2Fpostman%2Fimage%2Fupload%2Ft_team_logo%2Fv1%2Fteam%2Fanonymous_team&logoDark=https%3A%2F%2Fres.cloudinary.com%2Fpostman%2Fimage%2Fupload%2Ft_team_logo%2Fv1%2Fteam%2Fanonymous_team&right-sidebar=303030&top-bar=FFFFFF&highlight=FF6C37&right-sidebar-dark=303030&top-bar-dark=212121&highlight-dark=FF6C37)
 
