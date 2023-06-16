@@ -1,8 +1,10 @@
-# <img width="50" src="./public/logo.png" alt="display-documentation"> **COFFEEIN**
+<div align="center">
+  # <img width="50" src="./public/logo.png" alt="display-documentation"> **COFFEEIN**
+  [![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
+  [![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)](https://expressjs.com/)
+  [![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+</div>
 
-[![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/en/)
-[![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)](https://expressjs.com/)
-[![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 <br>
 
 ---
@@ -16,8 +18,6 @@ The backend application for a coffee shop is a system specifically designed to m
 ## 𓆙 Requirement
 
 This repo require a [NodeJS](https://nodejs.org/)
-
-[ENV](#ENV) File
 
 ## 𓆙 Windows Installation
 
@@ -106,7 +106,7 @@ $ npm run dev
 
 ## Deployment
 
-Project Link: [https://coffe-shop-gamma.vercel.app/](https://coffe-shop-gamma.vercel.app/)
+Project Link: [klick](https://coffe-shop-gamma.vercel.app/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
